@@ -17,12 +17,12 @@ tabs:
 
   # Single terminal
   - name: Terminal
-    path: /terminal
+    path: /wetty
     port: 443
 
   # Kafka Console
   - name: Kafka Console
-    url: {{ kafka_console_url }}
+    url: 'https://console-kafka-console.${DOMAIN}'
 
   # External page
   - name: Red Hat Documentation
