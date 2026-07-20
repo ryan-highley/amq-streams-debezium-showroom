@@ -1,0 +1,4 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Custom Streams Image:

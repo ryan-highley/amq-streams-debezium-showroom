@@ -1,0 +1,4 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Operators, Subscriptions, and Custom Resource Definitions:

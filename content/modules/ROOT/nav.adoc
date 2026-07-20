@@ -1,19 +1,115 @@
-* xref:index.adoc[What is Showroom?]
 
-.Content Developer Guide
-* xref:quick-start.adoc[Quick Start]
-* xref:content-repo.adoc[Creating a Content Repository]
-* xref:agnosticv-config.adoc[AgnosticV Configuration]
-* xref:ui-config.adoc[UI Configuration]
-* xref:user-data.adoc[User Data and Variables]
-* xref:attribute-example.adoc[Attribute Injection Example]
-* xref:ocp4-role-reference.adoc[OCP4 Role Reference]
-* xref:vm-role-reference.adoc[VM Role Reference]
+.Day 1 - Red Hat Streams for Apache Kafka
+* xref:d1/kafka.adoc[Kafka]
+** xref:d1/kafka-strimzi.adoc[Strimzi Operator]
+** xref:d1/kafka-topics.adoc[Topics, Partitions, and Replication]
+** xref:d1/kafka-messages.adoc[Messages, Keys, Producers, and Consumers]
+** xref:d1/kafka-brokers.adoc[Brokers and Controllers]
+* xref:d1/kafka-connect.adoc[Kafka Connect]
+** xref:d1/kafka-connect-bcbs.adoc[Local Kafka Broker and AWS MSK]
+** xref:d1/kafka-connect-dbz-connectors.adoc[Debezium Connectors]
+** xref:d1/kafka-connect-jdbc-connectors.adoc[JDBC Connectors for Db2 and SQL Server]
+** xref:d1/kafka-connect-dlq-topics.adoc[Dead Letter Queue Topics]
+* xref:d1/kafka-security.adoc[Kafka Security]
+** xref:d1/kafka-security-cert-mgmt.adoc[Cluster certificate management]
+** xref:d1/kafka-security-authn.adoc[Authentication providers]
+** xref:d1/kafka-security-authz.adoc[Authorization and RBAC]
 
-.Showroom Developer Guide
-* xref:architecture.adoc[Architecture]
-* xref:deployer.adoc[Showroom Deployer]
-* xref:images.adoc[Showroom Images]
-* xref:nookbag.adoc[Nookbag UI]
-* xref:ocp-integration.adoc[OCP Integration]
-* xref:contributing.adoc[Contributing]
+.Day 2 - Red Hat OpenShift Container Platform for Developers
+* xref:d2/app-mgmt.adoc[Application Management]
+** xref:d2/app-mgmt-images-containers-pods.adoc[Images, Containers, and Pods]
+** xref:d2/app-mgmt-deployments.adoc[Deployments, StatefulSets, and Jobs]
+** xref:d2/app-mgmt-configmaps.adoc[ConfigMaps and Secrets]
+** xref:d2/app-mgmt-builds.adoc[Builds and ImageStreams]
+** xref:d2/app-mgmt-operators.adoc[Operators, Subscriptions, and Custom Resource Definitions]
+* xref:d2/gitops.adoc[Red Hat OpenShift GitOps]
+** xref:d2/gitops-principles.adoc[DevOps Principles]
+** xref:d2/gitops-apps.adoc[AppProjects, Applications, and ApplicationSets]
+** xref:d2/gitops-kustomize-and-helm.adoc[Kustomize and Helm]
+* xref:d2/quarkus.adoc[Red Hat build of Quarkus]
+** xref:d2/quarkus-development.adoc[Container-based development]
+** xref:d2/quarkus-config-mgmt.adoc[Configuration management]
+** xref:d2/quarkus-packaging.adoc[Packaging and deploying]
+** xref:d2/quarkus-reactive.adoc[Reactive messaging and database applications]
+
+.Day 3 - BCBS SC Streams Platform Operations
+* xref:d3/deployment.adoc[Deployment]
+** xref:d3/deployment-namespaces.adoc[Namespaces and contents]
+** xref:d3/deployment-helm.adoc[Helm chart]
+** xref:d3/deployment-updates.adoc[Update process]
+* xref:d3/custom-image.adoc[Custom Streams Image]
+** xref:d3/custom-image-jdbc.adoc[JDBC driver updates]
+** xref:d3/custom-image-db2-license.adoc[Db2 license jar]
+** xref:d3/custom-image-mks-iam.adoc[MKS IAM handler jars]
+* xref:d3/message-decryption.adoc[Message Decryption Transform]
+** xref:d3/message-decryption-keys-per-topic.adoc[Decryption keys per topic]
+** xref:d3/message-decryption-key-storage.adoc[Key storage in Secret]
+* xref:d3/db2-field-rename.adoc[Db2 Field Rename Transform]
+* xref:d3/jdbc-sink-connector.adoc[JDBC Sink Connector Configuration]
+* xref:d3/aws-msk.adoc[AWS MSK Configuration]
+* xref:d3/custom-iam.adoc[CustomIAMClientCallbackHandler]
+
+
+
+// .Workshop Intro
+// * xref:index.adoc[Introduction]
+// * xref:intro/intro.0.adoc[The story behind this workshop]
+
+// .Module 1 - Fundamentals of Kafka and Basic Concepts
+// * xref:m1/module-01.0.adoc[Module 1 - Fundamentals of Kafka and Basic Concepts]
+// * xref:m1/module-01.1.adoc[Kafka Basics - Topics]
+// * xref:m1/module-01.2.adoc[Kafka Basics - Partitions (how Kafka scales & orders)]
+// * xref:m1/module-01.3.adoc[Kafka Basics - Producer]
+// * xref:m1/module-01.4.adoc[Kafka Basics - Consumer]
+// * xref:m1/module-01.5.adoc[Kafka Basics - Partitioning and Keys]
+// * xref:m1/module-01.6.adoc[Kafka Basics - Consumer Groups and Rebalancing]
+// * xref:m1/module-01.7.adoc[Kafka Basics - Topic Replication and Fault Tolerance]
+// * xref:m1/finish.adoc[Finish]
+
+// .Module 2 - Kafka Application: Producing and Consuming Messages using a Real-World Application
+// * xref:m2/module-02.0.adoc[Module 2 - Kafka Application: Producing and Consuming Messages using a Real-World Application]
+// * xref:m2/module-02.1.adoc[Building Producers]
+// * xref:m2/module-02.2.adoc[Producer in Action]
+// * xref:m2/module-02.3.adoc[Building Consumers]
+// * xref:m2/module-02.4.adoc[Consumer in Action]
+// * xref:m2/module-02.5.adoc[Real Time Streaming Application]
+// * xref:m2/module-02.6.adoc[Quarkus and Kafka: Better Together]
+// * xref:m2/finish.adoc[Finish]
+
+// .Module 3 - Stream Processing
+// * xref:m3/module-03.0.adoc[Module 3 - Stream Processing]
+// * xref:m3/module-03.1.adoc[Tracking Web Activity using Kafka Streams]
+// * xref:m3/module-03.2.adoc[How Kafka Streams works behind the scenes]
+// * xref:m3/finish.adoc[Finish]
+
+// .Module 4 - Change Data Capture
+// * xref:m4/module-04.0.adoc[Module 4 - Change Data Capture]
+// * xref:m4/module-04.1.adoc[Deploy Debezium Connector]
+// * xref:m4/module-04.2.adoc[Verify Change Events are Captured]
+// * xref:m4/module-04.3.adoc[Globex Loyalty Program with Change Data Capture]
+// * xref:m4/finish.adoc[Finish]
+
+// .Module 5 - Schema Registry (Skipped)
+// * xref:m5/module-05.0.adoc[Module 5 - Schema Registry]
+// * xref:m5/module-05.1.adoc[Adding Schema to the Schema Registry]
+// * xref:m5/module-05.2.adoc[Producing and Consuming Messages interacting with Schema Registry]
+// * xref:m5/finish.adoc[Finish]
+
+// .Module 6 - Kafka Security
+// * xref:m6/module-06.0.adoc[Module 6 - Kafka Security]
+// * xref:m6/module-06.1.adoc[Authentication]
+// * xref:m6/module-06.2.adoc[Authorization, ACLs]
+// * xref:m6/finish.adoc[Finish]
+
+// .Module 7 - Record Encryption with Kafka Proxy
+// * xref:m7/module-07.0.adoc[Module 7 - Record Encryption with Kafka Proxy]
+// * xref:m7/module-07.1.adoc[Exploring the Encryption Setup]
+// * xref:m7/module-07.2.adoc[Record Encryption in Action]
+// * xref:m7/finish.adoc[Finish]
+
+// * xref:m8/module-08.0.adoc[Module 8 - Kafka and AI ]
+// * xref:m8/module-08.0.adoc[Introduction]
+// * xref:m8/module-08.1.adoc[MCP with Kafka]
+// * xref:m8/finish.adoc[Finish]
+
+// * xref:conclusion/summary.adoc[Workshop Summary]

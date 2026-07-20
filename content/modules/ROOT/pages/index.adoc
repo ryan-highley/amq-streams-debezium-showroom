@@ -1,94 +1,77 @@
-= What is Showroom?
-:navtitle: What is Showroom?
 
-Showroom is a web-based lab instruction platform for the https://demo.redhat.com[Red Hat Demo Platform].
-It combines rendered AsciiDoc content with embedded terminals, consoles, and interactive tools -- giving workshop and demo participants everything they need in a single browser tab.
+== Event Streaming
+Event streaming is a modern approach to building data-intensive applications that are responsive, resilient, and scalable. It enables real-time data processing and integration across diverse systems, making it ideal for today's fast-paced digital environments.
+Event streaming treats every change in your business (an order placed, payment authorized, sensor reading, log line, click) as an event written to an append-only log. Instead of pushing data directly from one service to another, systems publish events once and many consumers independently read, process, and react—now or later.
 
-== What Users See
+image::intro/event-streaming.png[]
 
-When a participant opens their Showroom URL they get a split-pane interface:
+Key properties:
 
-* **Left pane** -- step-by-step lab instructions rendered from an https://antora.org[Antora] site you author in AsciiDoc.
-* **Right pane** -- one or more tabs such as:
-** A web terminal (SSH to a bastion, containerised CLI tools, or both).
-** The OpenShift web console embedded in an iframe.
-** A VS Code editor (Code Server).
-** A VNC desktop (noVNC).
-** Any external URL you choose.
+* **Durable log with retention:** Events stick around for hours, days, or longer, enabling replay and backfills.
 
-The UI layout, tab names, and tab URLs are all controlled by a simple `ui-config.yml` file that lives in your content repository.
+* **Decoupling:** Producers and consumers evolve independently; new consumers can be added without changing producers.
 
-== How It Gets Deployed
+* **Scalable fan-out:** One event can feed real-time apps, analytics, ML features, and audit trails at the same time.
 
-This Ansible collection -- `agnosticd.showroom` -- is the primary way Showroom instances are deployed on the Red Hat Demo Platform.
-Depending on the environment type, you use one of two roles:
+=== Why Kafka?
 
-[cols="1,3",options="header"]
-|===
-|Role |Use when...
+Kafka is the most widely used event-streaming platform because it combines:
 
-|`ocp4_workload_showroom`
-|Your lab runs on an OpenShift 4 cluster.
-The role deploys Showroom as a pod using a Helm chart, complete with content rendering, terminals, and an OpenShift `Route`.
+. **High throughput & low latency:** Horizontal scaling via partitions across brokers.
 
-|`vm_workload_showroom`
-|Your lab runs on a VM (RHEL, Fedora, etc.).
-The role deploys Showroom with rootless Podman, Traefik for TLS, and systemd for lifecycle management.
-|===
+. **Per-partition ordering:** Reliable ordering for related keys (e.g., all events for customer X).
 
-Both roles follow the same basic flow:
+. **Replayability:** Consumers track their own offsets, so they can pause, catch up, or reprocess historic data.
 
-. Clone your Antora content repository.
-. Inject runtime variables (credentials, hostnames, GUIDs) as AsciiDoc attributes.
-. Render the content to HTML.
-. Serve the content alongside the terminal and tab services you configured.
-. Publish the final URL back to the user.
+. **Strong delivery options:** From at-least-once to exactly-once (with idempotence/transactions) for robust pipelines.
 
-== Key Concepts
+. **Ecosystem & interoperability:** Connectors, stream processing libraries, and standard APIs used across the industry.
 
-Content repository::
-A Git repo containing your AsciiDoc lab instructions, structured as an Antora component.
-You typically fork https://github.com/rhpds/showroom_template_nookbag[showroom_template_nookbag] and add your own pages.
-See xref:content-repo.adoc[].
+=== Common Kafka use cases (with patterns you’ll recognize)
 
-AgnosticV catalog item::
-The YAML configuration in the https://github.com/rhpds/agnosticv[agnosticv] repository that ties your content repo to an environment on the Red Hat Demo Platform.
-See xref:agnosticv-config.adoc[].
+* **Payments & risk:** Real-time scoring on auth events; asynchronous settlement; chargeback analytics.
 
-User data::
-A set of key-value pairs (hostnames, passwords, URLs) written by infrastructure roles during provisioning and automatically injected into your content as Antora attributes.
-See xref:user-data.adoc[].
+* **E-commerce:** Orders, inventory, pricing, and clickstream flowing to services and analytics in parallel.
 
-UI configuration::
-A `ui-config.yml` file in your content repo that defines the tabs, layout width, and dynamic URLs shown alongside your lab instructions.
-See xref:ui-config.adoc[].
+* **IoT/telemetry:** Millions of device readings ingested and aggregated continuously.
 
-== Where to Start
+* **Change Data Capture (CDC):** Database changes emitted as events to sync systems or build audit trails.
 
-[cols="1,3",options="header"]
-|===
-|Goal |Page
+* **Operational analytics:** Streams to warehouses/lakes for near-real-time dashboards and anomaly detection.
 
-|Get a Showroom lab running quickly
-|xref:quick-start.adoc[]
+* **Microservices choreography:** Services publish domain events; others react (SAGA patterns, outbox, DLT).
 
-|Create or structure a content repo
-|xref:content-repo.adoc[]
+* **Log aggregation:** Unified transport for logs and security events with long-enough retention to reprocess.
 
-|Wire up an AgnosticV catalog item
-|xref:agnosticv-config.adoc[]
+=== When Kafka might not be the right fit
+While we recommend Kafka for many use cases, there are some cases where it may not be the right fit.
 
-|Understand the full architecture
-|xref:architecture.adoc[]
+* Simple RPC or synchronous request/response between two services (use HTTP/gRPC).
 
-|Contribute to Showroom itself
-|xref:contributing.adoc[]
-|===
+* Tiny workloads or one-off tasks where a lightweight queue is simpler.
 
-== Related Projects
+* Huge binary blobs (store in object storage; send references via Kafka).
 
-* https://github.com/agnosticd/showroom[agnosticd.showroom collection] -- this Ansible collection (you are here).
-* https://github.com/rhpds/showroom_template_nookbag[showroom_template_nookbag] -- the recommended content repo template.
-* https://github.com/rhpds/showroom-deployer[showroom-deployer] -- Helm charts that power OCP deployments.
-* https://github.com/rhpds/showroom-images[showroom-images] -- container images (content server, terminals, Antora, etc.).
-* https://github.com/rhpds/nookbag[nookbag] -- the zero-touch UI bundle.
+=== What is {streams}?
+Running Kafka on OpenShift without native support can be complex. While deploying Kafka directly with standard resources like StatefulSet and Service is possible, the process is often error-prone and time-consuming. This is especially true for operations like upgrades and configuration updates.
+
+*{streams}* is Kafka built for OpenShift/Kubernetes. The Kafka distribution included in {streams} can also be deployed on RHEL or other JVM-supported systems, while the Strimzi-based operator component is designed specifically for Kubernetes/OpenShift. *{streams}* provides the following advantages:
+
+* **Native OpenShift integration**: {streams} transforms Kafka into an OpenShift-native application. It extends the Kubernetes API with Custom Resources (CRs) like Kafka, KafkaTopic, and KafkaUser. Custom resources offer a stable and highly configurable way to manage Kafka.
+
+* **Declarative cluster management:**  Manage the lifecycle of your Kafka resources declaratively. Declarative control allows you to manage resources like topics and users directly in YAML
+
+* **Support for upgrade, scaling, and recovery:** {streams} operators automate rolling upgrades and recovery of Kafka components, helping to reduce manual intervention and downtime
+
+* **Integrated support for data streaming pipelines:** When {streams} is installed, you can deploy and manage Kafka clusters alongside supporting components such as Kafka Connect, MirrorMaker 2, and Kafka Bridge, all using OpenShift-native custom resources.
+
+* **Integrated security:** Enables fine-grained access control through listener-level authentication, cluster-wide authorization, and network policies. Simplifies certificate management and manages secure client access through KafkaUser resources with ACLs, quotas, and handling of credentials.
+
+
+
+=== Workshop Objectives
+
+This workshop introduces you to the fundamentals of Event Streaming with *{streams}*. You will learn key concepts such as topics, partitions, producers, consumers, consumer groups, and replication. You will also gain hands-on experience by using a sample application to understand these concepts.
+
+This workshop is intended for developers and architects who are new to event streaming and want to learn how to use Kafka for building real-time data pipelines and streaming applications. 
+
