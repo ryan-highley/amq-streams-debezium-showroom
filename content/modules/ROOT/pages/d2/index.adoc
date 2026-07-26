@@ -1,0 +1,77 @@
+
+== Event Streaming
+Event streaming is a modern approach to building data-intensive applications that are responsive, resilient, and scalable. It enables real-time data processing and integration across diverse systems, making it ideal for today's fast-paced digital environments.
+Event streaming treats every change in your business (an order placed, payment authorized, sensor reading, log line, click) as an event written to an append-only log. Instead of pushing data directly from one service to another, systems publish events once and many consumers independently read, process, and react—now or later.
+
+image::intro/event-streaming.png[]
+
+Key properties:
+
+* **Durable log with retention:** Events stick around for hours, days, or longer, enabling replay and backfills.
+
+* **Decoupling:** Producers and consumers evolve independently; new consumers can be added without changing producers.
+
+* **Scalable fan-out:** One event can feed real-time apps, analytics, ML features, and audit trails at the same time.
+
+=== Why Kafka?
+
+Kafka is the most widely used event-streaming platform because it combines:
+
+. **High throughput & low latency:** Horizontal scaling via partitions across brokers.
+
+. **Per-partition ordering:** Reliable ordering for related keys (e.g., all events for customer X).
+
+. **Replayability:** Consumers track their own offsets, so they can pause, catch up, or reprocess historic data.
+
+. **Strong delivery options:** From at-least-once to exactly-once (with idempotence/transactions) for robust pipelines.
+
+. **Ecosystem & interoperability:** Connectors, stream processing libraries, and standard APIs used across the industry.
+
+=== Common Kafka use cases (with patterns you’ll recognize)
+
+* **Payments & risk:** Real-time scoring on auth events; asynchronous settlement; chargeback analytics.
+
+* **E-commerce:** Orders, inventory, pricing, and clickstream flowing to services and analytics in parallel.
+
+* **IoT/telemetry:** Millions of device readings ingested and aggregated continuously.
+
+* **Change Data Capture (CDC):** Database changes emitted as events to sync systems or build audit trails.
+
+* **Operational analytics:** Streams to warehouses/lakes for near-real-time dashboards and anomaly detection.
+
+* **Microservices choreography:** Services publish domain events; others react (SAGA patterns, outbox, DLT).
+
+* **Log aggregation:** Unified transport for logs and security events with long-enough retention to reprocess.
+
+=== When Kafka might not be the right fit
+While we recommend Kafka for many use cases, there are some cases where it may not be the right fit.
+
+* Simple RPC or synchronous request/response between two services (use HTTP/gRPC).
+
+* Tiny workloads or one-off tasks where a lightweight queue is simpler.
+
+* Huge binary blobs (store in object storage; send references via Kafka).
+
+=== What is {streams}?
+Running Kafka on OpenShift without native support can be complex. While deploying Kafka directly with standard resources like StatefulSet and Service is possible, the process is often error-prone and time-consuming. This is especially true for operations like upgrades and configuration updates.
+
+*{streams}* is Kafka built for OpenShift/Kubernetes. The Kafka distribution included in {streams} can also be deployed on RHEL or other JVM-supported systems, while the Strimzi-based operator component is designed specifically for Kubernetes/OpenShift. *{streams}* provides the following advantages:
+
+* **Native OpenShift integration**: {streams} transforms Kafka into an OpenShift-native application. It extends the Kubernetes API with Custom Resources (CRs) like Kafka, KafkaTopic, and KafkaUser. Custom resources offer a stable and highly configurable way to manage Kafka.
+
+* **Declarative cluster management:**  Manage the lifecycle of your Kafka resources declaratively. Declarative control allows you to manage resources like topics and users directly in YAML
+
+* **Support for upgrade, scaling, and recovery:** {streams} operators automate rolling upgrades and recovery of Kafka components, helping to reduce manual intervention and downtime
+
+* **Integrated support for data streaming pipelines:** When {streams} is installed, you can deploy and manage Kafka clusters alongside supporting components such as Kafka Connect, MirrorMaker 2, and Kafka Bridge, all using OpenShift-native custom resources.
+
+* **Integrated security:** Enables fine-grained access control through listener-level authentication, cluster-wide authorization, and network policies. Simplifies certificate management and manages secure client access through KafkaUser resources with ACLs, quotas, and handling of credentials.
+
+
+
+=== Workshop Objectives
+
+This workshop introduces you to the fundamentals of Event Streaming with *{streams}*. You will learn key concepts such as topics, partitions, producers, consumers, consumer groups, and replication. You will also gain hands-on experience by using a sample application to understand these concepts.
+
+This workshop is intended for developers and architects who are new to event streaming and want to learn how to use Kafka for building real-time data pipelines and streaming applications. 
+

@@ -77,6 +77,7 @@
 * xref:d1/common-workshop-links.adoc[Workshop Links]
 
 .Day 2 - Red Hat Streams for Apache Kafka
+* xref:d2/index.adoc[Introduction]
 * xref:d2/module-01.0.adoc[Fundamentals of Kafka and Basic Concepts]
 ** xref:d2/module-01.1.adoc[Kafka Basics - Topics]
 ** xref:d2/module-01.2.adoc[Kafka Basics - Partitions (how Kafka scales & orders)]
@@ -118,21 +119,22 @@
 ** xref:d2/module-07.finish.adoc[Finish]
 
 .Day 3 - BCBS SC Streams Platform Operations
-* xref:d3/deployment.adoc[Deployment]
-** xref:d3/deployment-namespaces.adoc[Namespaces and contents]
-** xref:d3/deployment-helm.adoc[Helm chart]
-** xref:d3/deployment-updates.adoc[Update process]
-* xref:d3/custom-image.adoc[Custom Streams Image]
-** xref:d3/custom-image-jdbc.adoc[JDBC driver updates]
-** xref:d3/custom-image-db2-license.adoc[Db2 license jar]
-** xref:d3/custom-image-mks-iam.adoc[MKS IAM handler jars]
-* xref:d3/message-decryption.adoc[Message Decryption Transform]
-** xref:d3/message-decryption-keys-per-topic.adoc[Decryption keys per topic]
-** xref:d3/message-decryption-key-storage.adoc[Key storage in Secret]
-* xref:d3/db2-field-rename.adoc[Db2 Field Rename Transform]
-* xref:d3/jdbc-sink-connector.adoc[JDBC Sink Connector Configuration]
-* xref:d3/aws-msk.adoc[AWS MSK Configuration]
-* xref:d3/custom-iam.adoc[CustomIAMClientCallbackHandler]
+* xref:attachment$Debezium_VDraft.pdf[Debezium CDC Pipeline]
+// * xref:d3/deployment.adoc[Deployment]
+// ** xref:d3/deployment-namespaces.adoc[Namespaces and contents]
+// ** xref:d3/deployment-helm.adoc[Helm chart]
+// ** xref:d3/deployment-updates.adoc[Update process]
+// * xref:d3/custom-image.adoc[Custom Streams Image]
+// ** xref:d3/custom-image-jdbc.adoc[JDBC driver updates]
+// ** xref:d3/custom-image-db2-license.adoc[Db2 license jar]
+// ** xref:d3/custom-image-mks-iam.adoc[MKS IAM handler jars]
+// * xref:d3/message-decryption.adoc[Message Decryption Transform]
+// ** xref:d3/message-decryption-keys-per-topic.adoc[Decryption keys per topic]
+// ** xref:d3/message-decryption-key-storage.adoc[Key storage in Secret]
+// * xref:d3/db2-field-rename.adoc[Db2 Field Rename Transform]
+// * xref:d3/jdbc-sink-connector.adoc[JDBC Sink Connector Configuration]
+// * xref:d3/aws-msk.adoc[AWS MSK Configuration]
+// * xref:d3/custom-iam.adoc[CustomIAMClientCallbackHandler]
 
 
 
