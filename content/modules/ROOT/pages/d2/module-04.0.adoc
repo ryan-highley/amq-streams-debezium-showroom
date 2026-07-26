@@ -1,0 +1,21 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Module 4: 
+{m4}
+
+=== Change Data Capture
+
+Change Data Capture (CDC) is a well-known software pattern that refers to the process of identifying and capturing changes made to data in a database and delivering those changes in real-time to a downstream process or system, which can then react on those changes.
+
+Typical use cases for CDC include data replication (moving data from one data store to another), populating analytical systems and data warehouses, and data propagation to other services without coupling (one service owns the data, other services keep a local, optimized view of the data). This lab is an example of the latter use case.
+
+In the open source world, https://debezium.io[Debezium] is the de-facto standard for CDC. Debezium records row-level changes within each database table by tailing the transaction log of the database. It transforms the captured changes into a _change event stream_.
+
+Most commonly, Debezium is deployed as a connector on top of Kafka Connect. Kafka Connect is a framework and runtime for implementing and operating source connectors (that send records into Kafka) and sink connectors (that propagate records from Kafka topics to other systems). Debezium is a source connector, it publishes the change event stream to Kafka topics, typically one topic per monitored database table.
+
+image::m4/cdc-architecture.png[]
+
+
+=== Activity Overview
+In this module, you will deploy a Debezium connector to capture changes from the Globex retail application database and publish them to Kafka topics. You will then verify that the change events are being published correctly. You will also see how other applications can use the change events produced by Debezium to build event-driven applications. 

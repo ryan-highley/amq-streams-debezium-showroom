@@ -1,0 +1,3 @@
+== Congratulations on completing this module!
+
+Congratulations! You have successfully learnt what goes into writing producer and consumer clients, *the Kafka Producer API and Kafka Consumer API*, the different configurations that can be used and a live activity tracking application in action. Proceed to the next module to learn about *Kafka Streams and stream processing.*

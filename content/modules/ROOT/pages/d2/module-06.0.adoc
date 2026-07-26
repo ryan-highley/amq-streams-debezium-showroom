@@ -1,0 +1,31 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Module 6: Securing {streams}
+{m6}
+
+
+As organizations increasingly rely on Kafka for mission-critical data pipelines, securing the cluster becomes essential. This module introduces the key aspects of Kafka security and lays the foundation for building a trusted, compliant event-streaming platform.
+
+Kafka security focuses on four main pillars:
+
+* *Authentication – Verifying who is connecting.*
+Kafka supports several authentication mechanisms such as TLS certificates (SSL), SASL/PLAIN, SCRAM, and OAuth. These ensure that only authorized clients, brokers, and users can establish connections.
+
+* *Authorization (ACLs) – controlling what each user/app is allowed to do.*
+Authorization decides which actions a specific user or client can perform on the Kafka cluster. Kafka uses Access Control Lists (ACLs) to grant or deny permissions in a detailed way—for example, a user may be allowed to read from a topic but not write to it. 
+
+* *Encryption – Protecting data in transit.*
+{streams} supports Transport Layer Security (TLS), a protocol for encrypted communication. Communication is always encrypted between Streams for Apache Kafka components. To set up TLS-encrypted communication between Kafka and clients, we can configure listeners in the Kafka custom resource.
+
+* *Auditing – Tracking who did what and when.*
+Auditing provides visibility into cluster activity by logging client operations such as topic creation, message production, and ACL changes. This is essential for compliance, incident investigation, and operational monitoring.
+
+
+=== Activity Overview
+In this module, you will learn about some of the most common Kafka security features, including authentication, authorization and encryption. We will also learn how to apply these features to your Kafka clusters.
+
+
+
+
+

@@ -1,4 +1,0 @@
-:imagesdir: ../../assets/images
-include::../style.adoc[]
-
-== Dead Letter Queue Topics:

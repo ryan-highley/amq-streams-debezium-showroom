@@ -1,0 +1,64 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+:check: ✓
+:cross: ×
+
+
+== Quarkus and Kafka
+Quarkus significantly simplifies interaction with Kafka compared to using the bare Apache Kafka Client in plain Java by leveraging the SmallRye Reactive Messaging framework based on the MicroProfile Reactive Messaging specification. This abstraction removes boilerplate code, manages low-level concerns like threading, serialization, and offset commits, and provides an annotation-driven, message-channel model.
+
+Let's look at how the activity tracking service uses Quarkus to produce and consume messages to and from Kafka topics.
+
+* Open the KafkaService.java file in the activity-tracking project by clicking on this link https://github.com/rh-cloud-architecture-workshop/activity-tracking-service/blob/main/src/main/java/org/globex/retail/KafkaService.java[link, window="_github"].This file is the Kafka producer responsible for sending user activity events to the Kafka topic.
+
+* Feel free to explore the code in detail to understand what's happening.
+
+
+=== Simplified Programming Model with Quarkus
+* In plain Java with the Kafka Client, you must manually set up the KafkaProducer or KafkaConsumer, handle configuration, manage threading for continuous polling, perform manual serialization/deserialization, and explicitly commit offsets.
+
+Quarkus abstracts this into a clean, annotation-based model using @Incoming and @Outgoing. You focus purely on the business logic of processing the message payload.
+
+Kafka Producer (Sending Messages)
+|===
+| Aspect | Plain Java(Kafka Client) | Quarkus(Reactive Messaging)
+| Setup
+| Manually configure *ProducerConfig* (bootstrap servers, serializers), create *KafkaProducer* instance.
+| Inject an Emitter and configure the channel in *application.properties*. Quarkus manages the Producer lifecycle.
+
+| Sending
+| Create a *ProducerRecord*, call *producer.send()*, and handle the returned Future for asynchronous send results.
+| Call the *Emitter.send()* method with the message payload.
+|===
+
+Kafka Consumer (Receiving Messages)
+|===
+| Aspect | Plain Java(Kafka Client) | Quarkus(Reactive Messaging)
+| Setup
+| Manually configure *ConsumerConfig*, create *KafkaConsumer* instance, and subscribe to topics.
+| Define a simple method with the *@Incoming* annotation. Quarkus manages the Consumer lifecycle and subscription.
+
+| Consumption Loop
+| You must run a continuous polling loop in a separate thread and handle *ConsumerRecords*
+| Quarkus runs the message processing automatically on a thread.
+
+| Committing Offsets
+| You must manually call *consumer.commitSync()* or *consumer.commitAsync()* after processing.
+| Automatic acknowledgment (offset commit) is managed by the commit strategies attribute (e.g., throttled).
+|===
+
+==== Developer Experience
+Quarkus also provides tooling and features that enhance the development and operation of Kafka-based microservices
+
+* Local Development and Testing - For development and testing, Quarkus has Dev Services. If you have the Kafka extension but no local configuration, Quarkus will automatically start a Kafka broker in a Docker container for you (using Testcontainers).
+
+* Shared Broker - Dev Services for Kafka implements a service discovery mechanism for your multiple Quarkus applications running in dev mode to share a single broker.
+
+* Health Checks - Quarkus provides several health checks for Kafka. These checks are used in combination with the *quarkus-smallrye-health* extension. Some of these checks include: Kafka Broker Readiness Check, Kafka Reactive Messaging Health Checks etc.
+
+There are a lot more features and capabilities that makes Quarkus a great choice for Kafka development and testing. You can learn more about Quarkus at link:https://quarkus.io/guides/kafka[Quarkus Kafka Guide, window="_quarkus"].
+
+
+
+
+

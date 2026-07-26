@@ -1,0 +1,216 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Authentication
+Kafka listeners use authentication to ensure a secure client connection to the Kafka cluster. A Kafka listener is essentially an entry point where Kafka clients (like producers or consumers) connect to the Kafka brokers. It defines how and from where clients can reach Kafka — including the network address, port, protocol  and authentication method. Security credentials are created and managed by the Cluster and User Operator. {streams} supports four main authentication mechanisms:
+
+* mTLS authentication (on listeners with TLS-enabled encryption)
+* SASL SCRAM-SHA-512
+* OAuth 2.0 token based authentication
+* Custom authentication (supported by Kafka)
+
+In all the previous modules, we used the listeners without authentication. Our Kafka cluster has multiple listeners with different protocols and authentication methods. 
+
+Let's have a quick look at the listeners in the Kafka cluster and learn about the purpose and configuration of the listeners in the Kafka cluster.
+
+[IMPORTANT]
+====
+If you have skipped module 1 and directly moved to module 6, please perform all the below steps to setup your terminals and environment. 
+
+Login to cluster in the *upper terminal*
+[source,sh,role="execute",subs=attributes+]
+----
+{login_command}
+----
+
+Create the kafka toolbox using the *upper terminal*
+[source,sh,role="execute",subs=attributes]
+----
+oc run -n kafka-{user_name} kafka-toolbox \
+  --image=registry.redhat.io/amq-streams/kafka-40-rhel9:3.0.0 \
+  --restart=Never \
+  --env="BOOTSTRAP=kafka-kafka-bootstrap.kafka-{user_name}.svc:9092" \
+  --env="PATH=/opt/kafka/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+  -- sleep infinity
+----
+
+Connect to the toolbox using the following command in the *upper terminal*.
+
+[source,sh,role="execute",subs=attributes]
+----
+oc rsh -n kafka-{user_name} kafka-toolbox
+----
+
+Login to cluster in the *lower terminal*
+[source,sh,role="execute",subs=attributes+]
+----
+{login_command}
+----
+====
+
+
+
+* Login to the project namespace `kafka-{user_name}` using the following command in the *lower terminal.* 
++
+[source,bash,role="execute",subs=attributes+]
+----
+oc project kafka-{user_name}
+----
+
+* Run the below command to see the listeners in the Kafka cluster.
++
+[source,bash,role="execute",subs=attributes+]
+----
+echo "Ports:" && \
+oc get svc kafka-kafka-bootstrap -o jsonpath='{range .spec.ports[*]}{.name}{" → "}{.port}{" ("}{.protocol}{")"}{"\n"}{end}' && \
+echo -e "\nStrimzi Discovery:" && \
+oc get svc kafka-kafka-bootstrap -o jsonpath='{.metadata.annotations.strimzi\.io/discovery}' | jq
+----
+
+* You should see an output similar to the following.
++
+[source,bash]
+----
+Ports:
+tcp-replication → 9091 (TCP)
+tcp-clients → 9092 (TCP)
+tcp-clientstls → 9093 (TCP)
+tcp-secure → 9095 (TCP)
+
+Strimzi Discovery:
+[
+  {
+    "port": 9092,
+    "tls": false,
+    "protocol": "kafka",
+    "auth": "none"
+  },
+  {
+    "port": 9093,
+    "tls": true,
+    "protocol": "kafka",
+    "auth": "none"
+  },
+  {
+    "port": 9095,
+    "tls": false,
+    "protocol": "kafka",
+    "auth": "scram-sha-512"
+  }
+]
+----
+
+Let's briefly decipher what this means:
+
+* *Port 9091 – Internal Broker Replication: Used for Kafka-to-Kafka traffic (brokers replicate partitions among themselves).*
+** Always internal, never exposed to clients.
+** Does not support authentication.
+** Should stay inside the cluster network only.
+** Restrict access to brokers and controllers — no external or client pods should reach it.
+
+* *Port 9092 – Plaintext Client Listener: Default listener for unsecured Kafka clients. This is the listener we have been using in the previous modules.*
+** No TLS, no authentication (auth: none).
+** Anyone with network access can read/write to topics.
+** Useful for quick testing or local development, but not safe for production.
+** Avoid exposing this outside the namespace or cluster.
+
+* *Port 9093 – TLS Client Listener: Client connection over encrypted TLS.*
+
+** Provides encryption in transit (prevents snooping).
+
+** No authentication by default (auth: none), so still anonymous unless combined with TLS client certs.
+
+** Safe for trusted internal apps when you only need data confidentiality.
+
+* *Port 9095 – SASL/SCRAM Listener: Authenticated client access.*
+
+** Requires username/password via SASL SCRAM-SHA-512 (auth: scram-sha-512).
+
+** Ensures only authorized users can connect.
+
+** Can optionally be wrapped with TLS (becomes SASL_SSL) for full encryption + authentication.
+
+** Best balance for typical production setups.
+
+
+=== Security in action
+Let's now see this in action.
+
+* Make sure you are still connected to the Kafka toolbox container we created in the previous modules.
++
+image::m6/tool-box-shell.png[]
++
+[IMPORTANT]
+====
+If not connected to the toolbox container, connect to it again using the following command in the *upper terminal*.
+
+[source,sh,role="execute",subs=attributes]
+----
+oc rsh -n kafka-{user_name} kafka-toolbox
+----
+
+====
+
+
+
+* In the **upper terminal**, create a new topic `secure-demo` using the secure 9095 listener, without authentication. A similar command to the one we used in the previous modules but targeting the authenticated 9095 listener instead of 9092. Let's see what happens.
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-topics.sh --bootstrap-server kafka-kafka-bootstrap:9095 \
+  --create --topic secure-demo --partitions 3 --replication-factor 1
+----
+
+* Wait for a minute or so and observe the topic creation times out and the command fails. You should see the following error message:
++
+[source,bash]
+----
+Error while executing topic command : Timed out waiting for a node assignment. Call: createTopics
+[2025-10-27 21:28:12,989] ERROR org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: createTopics
+ (org.apache.kafka.tools.TopicCommand)
+pod "topic-create" deleted
+pod kafka-user1/topic-create terminated (Error)
+----
+
+* This is because we are using the *secure 9095 listener without authentication.* 
+
+* We've already created an admin user on this cluster with all the privileges needed. We will use this user to create the topic using the secure listener with authentication. 
+
+* First, let's create a local config file with the necessary authentication details. Run the following command in the *upper terminal*.
++
+[source,sh,role="execute",subs=attributes+]
+----
+cat > /tmp/client.properties <<EOF
+security.protocol=SASL_PLAINTEXT
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="admin" password="adminpassword";
+EOF
+----
+
+
+* Now let's create the new topic again using the correct credentials. Observe that the credentials are now passed in the form of the config file  and we are using the secure 9095 listener with authentication.
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-topics.sh --bootstrap-server kafka-kafka-bootstrap:9095 \
+  --command-config /tmp/client.properties \
+  --create --topic secure-demo --partitions 3 --replication-factor 1
+----
+
+* The topic `secure-demo` creation should now be successful. You can verify the same by navigating to the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="console"] > topics. 
+
+
+* You should be able to see the topic `secure-demo` in the list. This is the topic we created using the secure 9095 listener with authentication.
+
+=== Up Next
+In the next section, we will learn about Access Control Lists (ACLs), which will allow us to control the access to topics, clusters, brokers, etc at a granular level. For example, we can allow a user to read from a topic but not write to it.
+
+
+
+
+
+
+
+
+
+

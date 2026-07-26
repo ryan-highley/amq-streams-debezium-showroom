@@ -1,0 +1,12 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Congratulations on completing this module!
+image::m1/roundup-image.png[]
+
+Congratulations! You have successfully learnt the basics of Red Hat Streams for Apache Kafka including *topics, partitions, producers, consumers, consumer groups, replication and fault tolerance.* 
+
+== Next steps
+Proceed to the next module to learn about how to write applications that produce and consume data from Kafka topics using Kafka API.
+
+

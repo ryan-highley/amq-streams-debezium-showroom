@@ -1,0 +1,40 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+
+== Kafka Basics - Partitioning and Keys
+As we learned earlier, With a key, the records/messages with the same key go to the same partition. Let's see this in action.
+
+* In the *upper terminal* run a new producer that will send a bunch of messages with key-value pair . This will ensure messages with the same key go to the same topic partition.
++
+[source,sh,role="execute",subs=attributes+]
+----
+i=1; while true; do echo "k$((i%10)):msg-$i"; i=$((i+1)); sleep 0.3; done | \
+  kafka-console-producer.sh \
+  --bootstrap-server $BOOTSTRAP \
+  --topic demo \
+  --property parse.key=true \
+  --property key.separator=:
+----
+
+* Wait for *10 seconds* after the producer starts to allow some messages to be produced. The messages produced will be in the format `key:value` such as `k1:msg-1`, `k2:msg-2` etc
+
+NOTE: You will not see any output in the terminal since the console producer does not print any confirmation messages when messages are produced successfully. Just wait for 10 seconds before proceeding to the next step.
+
+* Now stop the producer by hitting (Ctrl+C).
+
+* Navigate to the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="_amqstreams"] > topics > demo and verify the messages being produced to the topic `demo`. You should see messages with keys `k0` to `k9` being produced to the topic.
++
+image::m1/console_key_messages_pairs.png[]
+
+* From the messages tab, filter the messages with key `k1`. You can do this by deleting the existing text in the search box and typing `k1` and hitting enter. You should see that all the messages with key `k1` are in the same partition.
++
+image::m1/console_keys_messages.png[]
+
+* Try the same with the other keys such as `k2`, `k3` etc., and observe that all messages with the same key go to the same partition.
+
+Kafka uses a partitioner to determine which partition a message goes to based on the key. By default, Kafka uses a hash function on the key to determine the partition the message goes to. This ensures that messages with the same key always go to the same partition, which is important for maintaining order for the messages with the same key.
+
+=== Up Next
+This is a simple example of how Kafka partitions messages based on keys. In the next section, we will learn about consumer groups and rebalancing.
+

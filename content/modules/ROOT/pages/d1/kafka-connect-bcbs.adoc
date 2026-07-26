@@ -1,4 +1,0 @@
-:imagesdir: ../../assets/images
-include::../style.adoc[]
-
-== Local Kafka Broker and AWS MSK:

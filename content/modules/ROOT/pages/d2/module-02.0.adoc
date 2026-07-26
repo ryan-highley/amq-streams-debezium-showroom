@@ -1,0 +1,23 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Module 2: 
+{m2}
+
+=== Building Streaming Applications with Kafka APIs
+
+In the previous module, you learned the basics of Kafka, including topics, partitions, producers, consumers, consumer groups, replication, and fault tolerance. In this module, you will learn how to build streaming applications using Kafka APIs.
+
+=== Kafka APIs Overview
+Kafka provides several APIs that allow developers to interact with the Kafka cluster and build streaming applications. The main APIs include:
+
+* *Producer API:* Allows applications to send (produce) records to Kafka topics. 
+
+* *Consumer API:* Allows applications to read (consume) records from Kafka topics. Consumers can subscribe to one or more topics and can be part of consumer groups for load balancing and fault tolerance.
+
+* *Admin API:* Provides administrative operations for managing Kafka resources, such as creating and deleting topics, managing configurations, and monitoring the cluster.
+
+* *Kafka Streams API:* A client library for building real-time stream processing applications that process data stored in Kafka topics. 
+
+=== Activities overview:
+In this module we will focus on the Producer API and Consumer API. Kafka producer and consumer APIs are the primary means of interacting with a Kafka cluster in a client application. The APIs control the flow of messages.

@@ -1,0 +1,80 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+
+== Activity
+
+
+* Let's take a look at the code that the _recommendation engine_ application uses to calculate the list of featured products. Click here to see the code: https://github.com/rh-cloud-architecture-workshop/recommendation-engine/blob/main/src/main/java/org/globex/retail/streams/TopologyProducer.java[TopologyProducer.java, window="_blank"]
+
+* *Prepare the input stream from the Kafka topic trackingEventTopic for downstream processing (Line 45 - 46)* . This is the entry point of the pipeline
++ 
+[source,java]
+----
+KTable<String, ProductScore> productLikes =
+    builder.stream(trackingEventTopic, Consumed.with(Serdes.String(), Serdes.String()));
+---- 
+
+** Creating a Stream from a Kafka Topic - `builder.stream(...)` tells Kafka Streams to start reading a continuous flow of records from the Kafka topic.
+
+** Serializers/Deserializers - `Consumed.with(Serdes.String(), Serdes.String())` tells Kafka Streams how to read the data — here both key and value are plain strings..
+
+
+* *Transformations and aggregations(Line 47-51)* - This block takes raw user activity messages → parses them → filters irrelevant ones → converts to product scores → groups by product → and finally aggregates likes.
++
+[source,java]
+----
+.mapValues(JsonObject::new)
+.filter((key, value) -> value.getJsonObject("actionInfo") != null 
+    && value.getJsonObject("actionInfo").getString("productId") != null)
+.mapValues(value -> new ProductScore.Builder(
+    value.getJsonObject("actionInfo").getString("productId")).build())
+.groupBy((key, value) -> value.getProductId(), 
+    Grouped.with(Serdes.String(), productLikesSerde))
+.reduce(ProductScore::sum)
+
+----
+** Convert & Clean Data - Turns each JSON string into a JsonObject and filters out records that don’t have a valid product ID.
+
+** Create ProductScore Objects - Creates a new ProductScore object for each message.
+
+** Group by Product - Regroups the stream so all events for the same product go together. Behind the scenes, Kafka Streams creates an internal topic to shuffle and group related records
+
+** Reduce (Aggregate Scores) - Keeps a running total of each product’s score in a state store.The result is a KTable showing the current popularity of every product.
+
+* *Continuously keep track of the Top-N featured products per category by listening to all product score updates, storing and updating the results automatically (Line 53-57)*
++
+[source,java]
+----
+productLikes
+  .groupBy((key, value) -> KeyValue.pair(value.getCategory(), value),
+           Grouped.with(Serdes.String(), productLikesSerde))
+  .aggregate(
+      () -> new FixedSizePriorityQueue<>(ProductScore.SCORE_ORDER, aggregationSize),
+      (key, value, aggregate) -> aggregate.add(value),
+      (key, value, aggregate) -> aggregate.remove(value),
+      Materialized.<String, FixedSizePriorityQueue, KeyValueStore<Bytes, byte[]>>as(aggregationStore)
+          .withKeySerde(Serdes.String())
+          .withValueSerde(fixedSizePriorityQueueSerde)
+  );
+
+----
+
+** Group by Category - Re-keys the stream so all products in the same category are grouped together. Prepares data for per-category aggregation.
+
+** Aggregate: Build a Top-N List per Category
+
+*** Initializer: creates an empty fixed-size queue that will keep only the top-scoring products.
+
+*** Adder: adds or updates a product in that queue when a new score arrives.
+
+*** Subtractor: removes the old entry if a product’s score changes (keeps results accurate).
+
+*** Each category now has its own “Top N products” list that updates in real time.
+
+** Materialize to a Store -Saves these category-wise top lists in a local state store called aggregationStore. Kafka Streams also writes a changelog to Kafka so state can be restored if the app restarts.
+
+=== Conclusion
+In conclusion, Kafka Streams enables applications to receive data from one or more input streams. You can use this API to run a sequence of real-time operations on streams of data, like mapping, filtering, and joining.  Hopefully this was helpful in understanding how Kafka Streams lets you process and react to data as it flows. It bridges the gap between real-time messaging and continuous computation — turning a stream of simple Kafka events into live, evolving insights.
+
+

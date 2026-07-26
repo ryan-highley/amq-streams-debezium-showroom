@@ -1,7 +1,7 @@
 ---
 site:
-  title: Showroom Template Demo
-  url: https://github.com/rhpds/showroom_template_nookbag
+  title: BCBS SC - Red Hat OpenShift and Streams for Apache Kafka Workshop
+  url: https://github.com/ryan-highley/amq-streams-debezium-showroom
   start_page: modules::index.adoc
 
 content:

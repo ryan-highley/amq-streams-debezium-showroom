@@ -1,0 +1,106 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+
+== Kafka Basics - Topics
+
+Topics are the building blocks of Kafka. A topic is a logical collection of messages that you want to group together. It is a named, append-only, stream of records (events/messages).
+
+image::m1/topic-image.png[]
+
+=== Why Topics?
+They decouple producers (writers) and consumers (readers). Many producers can write, many consumers can read — independently and at their own pace.
+
+=== Key properties
+
+. *Immutable, append-only:* records are never updated in place.
+
+. *Multi-subscriber:* any number of consumers can read the same topic without interfering with each other.
+
+. *Retention-based:* Kafka keeps data based on time (e.g., 7 days) and/or size (e.g., 100GB), not “until consumed”.
+
+
+=== Records (messages) inside a topic
+
+. *Key (optional):* used for partitioning & compaction semantics.
+
+. *Value:* your payload (JSON, Avro, Protobuf, bytes).
+
+. *Headers (optional):* metadata (trace IDs, content-type, etc.).
+
+. *Timestamp:* event time or broker time.
+
+
+=== Creating a Topic
+
+* In the *upper terminal*, log in the OpenShift cluster using the following command. use the image:common/clipboard.png[width=30px] icon to copy.
++
+[source,sh,role="execute",subs=attributes+]
+----
+{login_command}
+----
+
+* Type `y` and press enter when prompted `Use insecure connections? (y/n):`
+
+* Let's create a Kafka toolbox container which has the Kafka client tools installed. In the *upper terminal*, run the following command.
++
+[source,sh,role="execute",subs=attributes+]
+----
+oc run -n kafka-{user_name} kafka-toolbox \
+  --image=registry.redhat.io/amq-streams/kafka-40-rhel9:3.0.0 \
+  --restart=Never \
+  --env="BOOTSTRAP=kafka-kafka-bootstrap.kafka-{user_name}.svc:9092" \
+  --env="PATH=/opt/kafka/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+  -- sleep infinity
+----
+
+* Wait for a few seconds until the toolbox container is created.
+
+* Connect to the toolbox container you just created by running the following command in the *upper terminal*.
++
+[source,sh,role="execute",subs=attributes+]
+----
+oc rsh -n kafka-{user_name} kafka-toolbox
+----
+
+* In the *upper terminal*, create a Kafka topic named `demo` with 3 partitions and a replication factor of 1 (more about replication later) using the following command. Wait for a few seconds until you see the confirmation message that the topic is created.
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-topics.sh --bootstrap-server $BOOTSTRAP \
+  --create --topic demo --partitions 3 --replication-factor 1
+----
+
+// NOTE: This command creates a temporary container with the Kafka client tools installed and executes the Kafka command to create the topic. The container is removed after the command is executed. This is method is an easy way to learn the basics without having to install the client tools on your local machine.
+
+
+// * In the *upper terminal*, run the following command to see the the details of the created topic, including the number of partitions and replicas.
+// +
+// [source,sh,role="execute",subs=attributes+]
+// ----
+// oc run -n kafka-{user_name} topic-describe --rm -it --restart=Never \
+//   --image=registry.redhat.io/amq-streams/kafka-40-rhel9:3.0.0 -- \
+//   bash -lc '/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka-kafka-bootstrap:9092 --describe --topic demo'
+// ----
+
+* Click https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka/[here, window="_amqstreams"] to navigate to the {streams} console to view the topic you created. The console is a web-based user interface for visualizing and monitoring Kafka clusters, topics, messages etc.
+
+* Login anonymously to the console.
++
+image::m1/console_anonymous.png[]
+
+* Click on *Topics* in the left menu to see the list of topics. You should see the `demo` topic you created. This topic has 3 partitions.
++
+image::m1/console_topics.png[]
+
+
+=== Up Next
+We will learn about partitions and replication in the next section.
+
+
+
+
+
+
+
+

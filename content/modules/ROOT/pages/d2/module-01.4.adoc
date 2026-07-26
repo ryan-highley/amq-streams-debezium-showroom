@@ -1,0 +1,81 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+
+
+== Kafka Basics - Consumer (how data gets out)
+A Kafka Consumer reads messages from Kafka topics and hands them to your application code for processing. The consumer is the component that:
+
+* Subscribes to one or more topics,
+
+* Fetches records from assigned partitions,
+
+* Tracks offsets (positions) to know what’s been processed,
+
+* Coordinates with other consumers via consumer groups for parallelism and fault tolerance.
+
+* A consumer can read data from any offset within a topic partition. In most cases, a consumer advances its offset linearly, but it can seek to any offset and read sequentially from that point.
+
+* The consumer will typically “commit” its offset back to the  Kafka cluster so the consumer can resume from where it left off (for example, in case it restarts).
+
+=== Running a Consumer
+* In the *lower terminal*, login to the OpenShift cluster using the following command. use the image:common/clipboard.png[width=30px] icon to copy.
++
+[source,sh,role="execute",subs=attributes+]
+----
+{login_command}
+----
+
+* Connect to the toolbox container you created by running the following command in the *lower terminal*.
++
+[source,sh,role="execute",subs=attributes+]
+----
+oc rsh -n kafka-{user_name} kafka-toolbox
+----
+
+* Run the consumer in the *lower terminal*
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-console-consumer.sh --bootstrap-server $BOOTSTRAP --topic demo \
+  --group demo-group \
+  --from-beginning \
+  --property print.key=true \
+  --property print.partition=true \
+  --property key.separator=" | "
+----
+
+
+
+* Observe that the messages that the producer had sent earlier appear in the consumer terminal, indicating that they are being consumed. The *null values* indicate that no key was provided while sending the messages.
+
+
+* Type more messages in the producer terminal and observe them being consumed in the consumer terminal.
+
+* Since we are not providing a key, the messages *might* get distributed across partitions and the ordering is not guaranteed if that is the case. We will see how partitions and keys can help us with guaranteed ordering in the next section.
++
+NOTE: Since we are sending very few messages, there is chance that all the messages might end up in the same partition. But in real world, there would be thousand of messages per second and without a key, the messages might end up in different partitions.
+
+* Navigate to the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="_amqstreams"] > Consumer groups. Click on the *demo-group* consumer group to see the details. 
++
+image::m1/console_demo-group.png[]
+
+* Each consumer belongs to a consumer group, a list of consumer instances that ensures fault tolerance and scalable message processing. We will learn about consumer groups in detail in the next section.
+
+* Click on the only consumer in the group (consumer ID: console-consumer) to see the details. When a consumer group contains only one consumer, that consumer is responsible for processing all messages of all partitions.
++
+image::m1/console_consumer.png[]
+
+* Click on any partition which has messages consumed(non zero values under *Committed* and *End Offset* column) to see the details.
++
+image::m1/console_consumed_partition.png[]
+
+* You should be able to see the messages consumed by the consumer from that partition.
++
+image::m1/console_consumed_partition_messages.png[]
+
+=== Clean up
+* Type *ctrl+c* in the *upper terminal* and *ctrl+c* in the *lower terminal* to stop the producer and consumer respectively.
+
+=== Up Next
+Now that we have looked at the basics of producers and consumers, let's learn how ordering of messages can be achieved using partitions and keys in the next section.

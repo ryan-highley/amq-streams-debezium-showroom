@@ -1,0 +1,44 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+
+
+== Kafka Basics - Producer (how data gets into Kafka)
+
+A Kafka Producer is a client application responsible for writing data to a Kafka cluster. These applications send messages, which are typically key-value pairs, into topics within the Kafka cluster. In short, producers are a flexible and powerful way to send data to Kafka while abstracting away much of the underlying complexities
+
+=== Core Functionality and API:
+* API: Producers interact with Kafka through the KafkaProducer API. Producers can be in written in a variety of languages such as Java,  Python, Go, JavaScript, and .NET.
+
+* Producers publish messages to a topic, which appends each message to the end of a partition. 
+
+=== Running the Producer
+* Run the basic producer in the *upper terminal*
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-console-producer.sh --bootstrap-server $BOOTSTRAP --topic demo
+----
+
+* Type the below messages as soon as the producer is ready in the *upper terminal*. The producer is ready when you see the `>` prompt. Each line you type is sent as a separate message to the Kafka topic `demo`. Type each word and hit enter.
++
+** `welcome`
+** `to`
+** `the`
+** `kafka`
+** `workshop`
+** `enjoy!`
+
+* Keep the producer running to send more messages in the next section.
+
+// * Hit `Ctrl + C` followed by `Enter` in the *upper terminal* to stop the producer after sending the messages.
+
+* Navigate to the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="_amqstreams"] *topics > demo* to see the messages you sent.
++
+image::m1/console_messages.png[]
+
+* The messages you sent from the producer are successfully received and stored in the Kafka topic `demo`. 
+
+
+=== Up Next
+In the next section, we will learn how to consume these messages from the topic.

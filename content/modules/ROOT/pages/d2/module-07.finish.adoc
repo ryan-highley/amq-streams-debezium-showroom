@@ -1,0 +1,7 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Congratulations on completing this module!
+
+Congratulations! You learnt how the *{streams} Proxy* provides *transparent record encryption* without any changes to your application code. You explored the proxy's architecture, produced encrypted messages, consumed them back in plaintext, and verified that data at rest in Kafka is encrypted by reading directly from the brokers.
+

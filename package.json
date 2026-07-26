@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@andrew-jones/antora-tabs-extension": "github:andrew-jones/antora-tabs-extension"
+  }
+}

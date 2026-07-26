@@ -1,0 +1,57 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Kafka Basics - Topic Replication and Fault Tolerance
+Kafka's fault tolerance is fundamentally built upon its topic replication mechanism, ensuring data durability and high availability in the event of broker failures.
+
+For each partition, Kafka maintains multiple copies called replicas, distributed across different Kafka brokers:
+
+** One replica is designated as the leader. All produce and consume requests for that partition are handled exclusively by its leader to ensure strong consistency and message ordering.
+** The other replicas are followers. Their sole responsibility is to diligently replicate messages from the leader to stay up-to-date. 
+
+** When a broker with a leader partition goes down, a new leader is elected on a different node.
+
+
+
+image::m1/replication-broker.png[]
+
+
+Let's see this in action.
+
+
+
+* In the **upper terminal**, create a new topic with replication factor of 3
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-topics.sh --bootstrap-server $BOOTSTRAP \
+  --create --topic replicated --partitions 3 --replication-factor 3
+----
+
+* Navigate to the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="_amqstreams"] > topics > replicated and verify that the topic `replicated` is created with 3 partitions
++
+image::m1/replicated-topic.png[]
+
+* Click on the topic name `replicated` and navigate to the partitions tab to view the details of the topic. You will see that each partition has one leader and 2 replicas.
++
+image::m1/replicated-topic-partitions.png[]
+
+* The number shown in the brackets is the broker id. In this case, we have 3 brokers with ids 0, 1 and 2. The leader and replicas are spread across these brokers to ensure fault tolerance.
+
+* Each partition has one leader and two followers (replicas). The leader handles all the read and write requests for that partition while the followers replicate data from the leader to ensure fault tolerance.
+
+* If the leader broker goes down, one of the followers will be automatically elected as the new leader to ensure high availability. This ensures that producers and consumers can continue to operate without interruption.
+
+NOTE: We are not going to simulate a broker failure in this exercise, since we need them to be up and running for the rest of the module. 
+
+
+=== Summary
+* Fault tolerance is built on the topic replication mechanism. This ensures data durability and high availability in the event of broker failures.
+
+* Replication factor ensures that each partition has one leader and multiple followers (replicas) to ensure fault tolerance.
+
+* The replicas are spread across different brokers to ensure fault tolerance, so even if one broker goes down, the data is still available on other brokers.
+
+
+
+

@@ -1,0 +1,52 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+
+== Kafka Basics - Partitions (how Kafka scales & orders)
+
+Storing the messages in a topic in a single node would limit the scalability of the system. Partitions are the solution for this. A topic is split into partitions, each an ordered, append-only, log that are distributed across brokers. This allows kafka to process a large number of messages in parallel and in a distributed manner. Partitions enable parallelism and throughput.
+
+image::m1/topic-image.png[]
+
+=== Message Ordering
+* Messages sent to kafka can consist of only a value or a key-value pair. 
+
+* Though ordering of the messages is not guaranteed, across a topic, strict order can be achieved within a partition.
+
+* Ordering is guaranteed within a single partition. To ensure that related messages end up in the same partition (and are therefore ordered relative to each other), send them with the same key.
+
+
+=== Replication & Fault Tolerance
+
+* Each partition has one leader and replicas (followers).
+
+* The leader handles all reads and writes for the partition.
+
+* Producers/consumers talk to the leader; followers keep up via replication.
+
+image::m1/replication-broker.png[]
+
+
+
+
+
+
+=== Exercise
+
+* Click https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka/[here, window="_amqstreams"] to navigate to the {streams} console to view the topic you created.
+
+* Click on *Topics* in the left menu to see the list of topics. You should see the `demo` topic you created. Click on the `demo` topic and then navigate to the *Partitions* tab. You should see the `demo` topic  has 3 partitions.
++
+image::m1/partitions-image-console.png[]
+
+* The partitions are spread across different brokers to ensure fault tolerance. The leader column shows the Broker ID in which the partition is located. 
++
+image::m1/leader-image-console.png[]
+
+
+* The replicas column typically shows the broker IDs of the other brokers that hold replicas of the partition and currently there are empty since we have created our topic with replication factor of 1 (which is not recommended in a production setup).
++
+image::m1/replica-image-console.png[]
+
+=== Up Next
+This concludes a very high-level overview of how Kafka partitions work. In the next section, we'll learn about Kafka producers and consumers.

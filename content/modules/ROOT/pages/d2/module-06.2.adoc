@@ -1,0 +1,264 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Access Control Lists (ACLs)
+*Access Control Lists (ACLs)* are used to fine-tune access to the Kafka clusters. They allow you to control what each identity can access. Access Control Lists (ACLs) are defined at a fine-grained level, for example, allowing a user to read from a topic but not write or delete it.
+
+The ACLs apply access rules to client applications. ACLs determine what an authenticated client can do once its identity has been verified. 
+
+The Authorization is implemented using the StandardAuthorizer plugin provided with {streams}. An ACL authorizer uses ACL rules to manage access to Kafka brokers. ACL rules are defined in the following format:
+Principal P is allowed / denied <operation> O on <kafka_resource> R from host H
+
+For example, a rule might be set so that user John can view the topic comments from host 127.0.0.1. Host is the IP address of the machine that John is connecting from.
+
+
+
+
+=== Creating ACLs
+In this section, *we will setup ACLs for a producer and a consumer user respectively.* 
+
+We will setup the ACLS for the producer user such that they will be *able to write to the topic `secure-demo` but not create or delete it.* 
+
+We will setup the ACLs for the consumer user such that they will be *able to read from the topic `secure-demo` but not write to it.*
+
+* We can define the ACLs while creating the KafkaUser resource. Let's create the ACLs for the producer user first. Navigate to the link:{openshift_cluster_console}[OpenShift console, window="console"] and log in with your username and password (`{user_name}`/`{password}`).
+
+Click on the *+* icon. 
++
+image:common/create-yaml.png[]
+
+* Click on the `Import YAML` option and paste the following YAML into the YAML editor.
++
+[source,yaml,role="execute",subs=attributes+]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: producer-password
+  namespace: kafka-{user_name}
+type: Opaque
+stringData:
+  password: "producerpassword"
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: producer
+  namespace: kafka-{user_name}
+  labels:
+    strimzi.io/cluster: kafka
+spec:
+  authentication:
+    type: scram-sha-512
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: producer-password
+          key: password
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: secure-demo
+          patternType: literal
+        operations:
+          - Write
+          - Describe
+        host: "*"
+----
+
+* The above custom resource creates a KafkaUser with username `producer` and the password is stored in a secret named `producer-password`. Under the authorization section, we define an ACL for the topic `secure-demo`. This user will be able to write to the topic `secure-demo` but not create or delete it. Go ahead and click the create button now
++
+image::m6/producer-user-yaml-create.png[]
+
+* Now, let's try to delete the topic using the producer user you just created. 
+
+* Navigate to the *upper terminal* and first create a temporary config file with the producer credentials. 
++
+[source,sh,role="execute",subs=attributes+]
+----
+cat > /tmp/client.properties <<EOF
+security.protocol=SASL_PLAINTEXT
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="producer" password="producerpassword";
+EOF
+----
+
+
+* Navigate to the *upper terminal* and run the following command, to see if the producer user can delete the topic `secure-demo`.
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-topics.sh --bootstrap-server kafka-kafka-bootstrap:9095 \
+  --command-config /tmp/client.properties \
+  --delete --topic secure-demo
+----
+
+* You should see an error message similar to the following:
++
+[source,bash]
+----
+ERROR org.apache.kafka.common.errors.TopicAuthorizationException: Topic authorization failed.
+----
+
+* The above error is expected and shows the ACL in action as the producer user only has permissions to write to the topic but not delete it. 
+
+* Now, Let's try to write to topic. Run the below command in the *upper terminal* and write some messages to the topic.
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-console-producer.sh \
+  --bootstrap-server kafka-kafka-bootstrap:9095 \
+  --producer.config /tmp/client.properties \
+  --topic secure-demo
+----
+
+* Write some messages as shown below and hit `ctrl+c` to stop the producer.
++
+[source,bash]
+----
+> ACLs
+> make
+> your
+> kafka
+> cluster
+> secure
+----
+
+* To verify the ACL worked, navigate to the link:https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="_amqstreams"] > topics and click on the topic `secure-demo` and notice your messages. This shows that the producer user is able to write to the topic `secure-demo` but not delete it.
++
+image::m6/secure-acl-message.png[]
+
+* Next let's implement a sample ACL for a consumer user. Navigate to the link:{openshift_cluster_console}[OpenShift console, window="console"] and click on the *+* icon 
++
+image:common/create-yaml.png[] icon. 
+
+* Click on the `Import YAML` option and paste the following YAML into the YAML editor.
++
+[source,yaml,role="execute",subs=attributes+]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consumer-password
+  namespace: kafka-{user_name}
+type: Opaque
+stringData:
+  password: "consumerpassword"
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: consumer
+  namespace: kafka-{user_name}
+  labels:
+    strimzi.io/cluster: kafka
+spec:
+  authentication:
+    type: scram-sha-512
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: consumer-password
+          key: password
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: secure-demo
+          patternType: literal
+        operations:
+          - Read
+          - Describe
+        host: '*'
+      - resource:
+          type: group
+          name: console-consumer-
+          patternType: prefix
+        operations:
+          - Read
+        host: '*'
+----
+
+* Observe that this user only has read access to the topic `secure-demo`.  Go ahead hit the create button now. 
+
+* Let's double check if this user can write to the topic. Since this user is for consumers they should not be able to write to the topic. 
+
+* Quit the producer if it is still running by hitting `ctrl+c` in the terminal.
+
+* Navigate to the *upper terminal* and first create a temporary config file with the consumer credentials. 
++
+[source,sh,role="execute",subs=attributes+]
+----
+cat > /tmp/client.properties <<EOF
+security.protocol=SASL_PLAINTEXT
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="consumer" password="consumerpassword";
+EOF
+----
+
+* In the *upper terminal*, run the following command to see if client with consumer credentials can write to the topic(which the ACL does not allow). 
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-console-producer.sh \
+  --bootstrap-server kafka-kafka-bootstrap:9095 \
+  --producer.config /tmp/client.properties \
+  --topic secure-demo
+----
+
+* Try to write a message to the topic. 
++
+[source,bash]
+----
+> I
+> am
+> an
+> evil
+> consumer
+> trying
+> to
+> write
+> to
+> a
+> topic
+----
+
+* You should see an error message similar to the following indicating that the consumer user is not allowed to write to the topic `secure-demo`.
++
+[source,bash]
+----
+2025-12-15 22:51:20,756] ERROR [Producer clientId=console-producer] Aborting producer batches due to fatal error (org.apache.kafka.clients.producer.internals.Sender)
+org.apache.kafka.common.errors.ClusterAuthorizationException: Cluster authorization failed.
+[2025-12-15 22:51:20,771] ERROR Error when sending message to topic secure-demo with key: null, value: 2 bytes with error: (org.apache.kafka.clients.producer.internals.ErrorLoggingCallback)
+org.apache.kafka.common.errors.ClusterAuthorizationException: Cluster authorization failed.
+pod "sinster-consumer" deleted
+----
+
+
+
+* Hit `ctrl+c` to stop it.
+
+* Let's check if the consumer user is able to read the topic, which the ACL allows. Run the below command in the *upper terminal*.
++
+[source,sh,role="execute",subs=attributes+]
+----
+kafka-console-consumer.sh \
+  --bootstrap-server kafka-kafka-bootstrap:9095 \
+  --consumer.config /tmp/client.properties \
+  --topic secure-demo \
+  --from-beginning
+----
+
+* You should see all the messages written by the producer to the topic `secure-demo` indicating that the consumer user is able to read the topic and ACLs are implemented as expected.
+
+* Press `ctrl+c` to stop the consumer.
+
+=== Conclusion
+What we have seen so far is a simple example of ACLs. Enterprises can synchronize users and groups from their existing IDMs with *Red Hat build of Keycloak* technologies to implement fine-grained access control. The policies and ACL rules can be configured for the users or groups in Red Hat build of Keycloak which the kafka admins can use to secure the Kafka clusters using ACLs. 
+
+Streams for Apache Kafka supports the use of *OAuth 2.0* token-based authorization through Red Hat build of Keycloak Authorization Services, which allows you to manage security policies and permissions centrally.
+
+If you are interested in learning more about this topic, this link:https://developers.redhat.com/articles/2022/05/04/use-red-hats-sso-manage-kafka-broker-authorization#[blog post,window="reference"] is a good starting point.

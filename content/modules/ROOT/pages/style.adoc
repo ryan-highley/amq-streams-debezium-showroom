@@ -1,0 +1,48 @@
+++++
+
+<style>
+.doc {
+    max-width: 70rem;
+}
+
+.underline {
+  cursor: pointer;
+}
+
+u {
+    cursor: pointer;
+}
+
+summary  {
+    cursor: pointer;
+}
+
+.toc {
+    display: none !important;
+}
+
+
+.label {
+    color: #fff;
+    padding: .2em .6em .3em;
+    font-weight: 700;
+    border-radius: .25em;
+    font-size: 90%;
+}
+
+.added {background-color: #007700;}
+.changed {background-color: #088;}
+.updated {background-color: #3344bb;}
+
+</style>
+
+++++
+
+
+:m1: pass:quotes[[.label.added]#Module 1#]
+:m2: pass:q[[.label.changed]#Module 2#]
+:m3: pass:q[[.label.updated]#Module 3#]
+:m4: pass:quotes[[.label.added]#Module 4#]
+:m5: pass:q[[.label.changed]#Module 5#]
+:m6: pass:q[[.label.updated]#Module 6#]
+:m7: pass:q[[.label.added]#Module 7#]

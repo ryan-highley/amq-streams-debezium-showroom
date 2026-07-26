@@ -1,0 +1,48 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Featured products
+In the previous module, you generated some user activity events using the Globex web application. Now let's see how the list of featured products is calculated in real-time based on that activity.
+
+
+
+* If you go back to the list of topics in the {streams} https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[console, window="_amqstreams"] (click *Topics*  on left-hand side) , you will notice a number of topics starting with *globex.recommendation* Those are the topics created by the _recommendation engine_ application, which calculates a list of the most popular products based on the user activity stream using the Kafka Streams API.
++
+image::m3/globex-recommendation-topics-console.png[]
+
+* The *globex.recommendation-product-score-aggregated-changelog* topic contains messages containing the list of most popular products, where the latest message has the current list.
++
+image::m3/amqstreams-globex-tracking-recommendation.png[]
+
+* The Globex web application uses the messages in this topic to display the list of featured products on the home page.
+
+* To verify this go to the tab pointing to the link:{globex_web_url}[Globex web application, window="_globex"] from your browser. Navigate to the home page. You should see some items in the list of featured products, corresponding to the list of products you liked previously.
++
+image::m3/globex-home-page-featured.png[]
+
+* To demonstrate that the list of featured products is calculated in real-time, you can simulate a number of user activities using a simulator deployed next to the Globex web application.
+
+
+* Click to open the simulator in a new browser tab - https://activity-tracking-simulator-globex-{user_name}.{openshift_cluster_subdomain}/q/swagger-ui/[Activity Tracking Simulator, window="_simulator"].
+
+
+* This opens a Swagger UI page showing the REST API of the simulator.
++
+image::m3/swagger-ui-activity-tracking-simulator.png[]
+
+* Click on the *POST* link, and then on the *Try it out* link on the right. + 
++
+image::m3/swagger-ui-activity-tracking-simulator-post-try.png[]
+
+* If you want, you change the number of user activities that will be generated (the default is 100). Click *Execute* to execute the REST call to the simulator.
++
+image::m3/swagger-ui-activity-tracking-simulator-2.png[]
+
+* In your browser window, navigate to the tab with the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams for Apache Kafka console, window="_amqstreams"] and notice how messages are produced in the *globex.tracking* topic. 
+
+* After a couple of seconds you should also see new messages in the *globex.recommendation-product-score-aggregated-changelog* topic, reflecting the newly calculated list of featured products.
+
+* Go the browser tab with link:{globex_web_url}[Globex web application, window="_globex"], refresh the home page, and notice how the list of featured products has changed, as it is being continuously recalculated.
+
+Great job! The list of featured products is updated in real-time based on the user activity stream. But let's take a closer look at how the list is calculated and how Kafka Streams does the magic behind the scenes to generate the list.
+

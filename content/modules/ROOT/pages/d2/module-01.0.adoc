@@ -1,0 +1,74 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+
+== Module 1: 
+{m1}
+
+=== Basics - What is a Kafka Cluster?
+
+A Kafka cluster is the whole distributed system that stores and moves your events. It’s made up of multiple Kafka processes with specific roles:
+
+Controllers (KRaft): keep the cluster’s metadata (what topics/partitions exist, which broker leads which partition, etc.) and run leader elections.
+
+Brokers: manage the storage of data and serve client traffic .
+
+=== Why clusters matter:
+
+* Scalability: add more brokers → more throughput and storage.
+
+* Fault tolerance: replicate partitions across brokers so a node loss doesn’t lose data or availability.
+
+* Central bootstrap: clients connect to a single “bootstrap” address (e.g., my-kafka-kafka-bootstrap:9092) and discover the rest.
+
+* In OpenShift/{streams} with KRaft + Node Pools:
+
+** The Kafka CR defines cluster-wide settings (Kafka version, listeners, configs).
+
+** KafkaNodePool CRs create sets of controller nodes and broker nodes.
+
+=== What is a Broker?
+
+A broker:
+
+* Stores topic partitions on disk (append-only logs, with retention policies).
+
+* Handles produce (writes) and consume (reads) requests.
+
+* Replicates partitions to/from peers; one broker is the leader for a partition, others are followers (when replication factor > 1).
+
+image::m1/broker_image.png[]
+
+=== Cluster Details - Walkthrough
+A kafka cluster made up of 3 brokers has already been created for this workshop. You will be working with this cluster throughout this workshop. Let's quickly explore the high-level details of the cluster using the {streams} console.
+
+* Click https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka/[here, window="_amqstreams"] to navigate to the {streams} console.
+
+* Login anonymously to the console.
++
+image::m1/console_anonymous.png[]
+
+* Click on the *Clusters overview* tab.
++
+image::m1/console_clusters_overview.png[]
+
+* Under the *Kafka cluster details* section, you will find details such as the name of the cluster, the number of brokers and the Kafka version
++
+image::m1/cluster_details.png[]
+
+* Click on the *Cluster connection details* tab to view the details on how to connect to the cluster.
++
+image::m1/connectiond_details.png[]
+
+* This should list all the bootstrap servers for the cluster and the authentication method they use. We shall learn more about them later. But for now, this is how we connect to the cluster.
++
+image::m1/bootstrap_server_details.png[]
++
+NOTE: The external bootstrap server section should be empty as we currently have not enabled access to the Kafka cluster from outside the OpenShift cluster.
+
+This concludes a very high-level overview of how Kafka clusters and brokers work. In the next section we'll learn about Kafka topics and create a topic.
+
+
+
+
+
+

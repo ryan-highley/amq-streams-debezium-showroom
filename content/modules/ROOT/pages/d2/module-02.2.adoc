@@ -1,0 +1,137 @@
+:imagesdir: ../../assets/images
+include::../style.adoc[]
+:check: ✓
+:cross: ×
+
+
+== Running a Simple Producer Application
+
+Let's run the simple streaming application.
+
+* In the Devspaces IDE, open a new terminal by clicking on the menu on the top left corner. Then select *Terminal > New Terminal.* to launch a new terminal window.
++
+image::m2/devspaces-terminal.png[]
+
+* In the terminal window, run the following command to navigate to the project directory.
++
+[source,bash,role="execute",subs=attributes+]
+----
+cd module-kafka-api/
+----
+
+NOTE: Hit *allow* if the browser prompts for permission to paste into the terminal.
+
+
+
+
+
+* In the file explorer on the left side, expand the `module-kafka-api` folder and then expand the `src/main/resources` folder. Click on the `application.properties` file to open it.
+
+* Replace the bootstrap servers placeholder value(line 13) with the following value.
++
+[source,bash,role="execute",subs=attributes+]
+----
+kafka-kafka-bootstrap.kafka-{user_name}.svc.cluster.local:9092
+----
+
+* Double check again to make sure that the bootstrap servers value has your corresponding username
++
+image::m2/app-properties-bootstrap_servers.png[]
+
+
+
+
+* Now let's run the producer application. Run the following command. This should start building the application and running the interactive application when it's done. This might take a couple of minutes to run the first time as it needs to build the application and download the dependencies. Subsequent runs should be faster.
++
+[source,bash,role="execute",subs=attributes+]
+----
+./run.sh
+----
+
+* After the application is done building and running and see the test paused screen as shown below, open the interactive application by clicking https://kafka-dashboard-devspaces-{user_name}.{openshift_cluster_subdomain}[here, window="_application"]
++
+image::m2/tests-passed.png[]
+
+* You should see the following application that allows we just built.
++
+image::m2/producer-interactive-app.png[]
+
+* Click on the *Run Producer* button to run the producer application. This will send messages to the `tutorial-topic` topic in your Kafka cluster as configured in the `application.properties` file.
+
+// * Keep pressing *enter* to accept the default values, which should trigger the producer sending the messages.
+
+* Go back to the devspaces terminal. You should see an error being thrown continuously in the terminal output. Press *ctrl+c* to stop the producer after observing the error.
+
+* The error message should be similar to the following indicating that the topic `tutorial-topic` does not exist.
++
+[source,bash]
+----
+Error while fetching metadata with correlation id 57 : {tutorial-topic=UNKNOWN_TOPIC_OR_PARTITION}
+[kafka-producer-network-thread | producer-1] WARN org.apache.kafka.clients.NetworkClient - [Producer clientId=producer-1] Error while fetching metadata with correlation id 58 : {tutorial-topic=UNKNOWN_TOPIC_OR_PARTITION}
+----
+
+* Press *ctrl+c* twice to stop the application.
+
+* In our cluster *auto.create.topics.enable* property is set to `false`. This is a Kafka broker configuration setting that *controls whether new topics are created automatically* when a producer or consumer attempts to access a non-existent one
+
+* This might be useful setting as it prevents typos in producer or consumer code from creating junk topics. 
+
+* Type `clear` and press enter to clear the terminal output on the devspaces terminal.
+
+* Now let's create the topic. Run the following command in the devspaces terminal.
++
+[source,bash,role="execute",subs=attributes+]
+----
+oc run -n kafka-{user_name} topic-create --rm --restart=Never --quiet --attach \
+--image=registry.redhat.io/amq-streams/kafka-40-rhel9:3.0.0 -- \
+bash -lc '/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka-kafka-bootstrap:9092 --create --topic tutorial-topic --partitions 3 --replication-factor 1'
+----
+
+* After the topic is created, run the interactive application again.
++
+[source,bash,role="execute",subs=attributes+]
+----
+./run.sh
+----
+
+* After the application is done building and running, open the interactive application by clicking https://kafka-dashboard-devspaces-{user_name}.{openshift_cluster_subdomain}[here, window="_application"]
+
+* The producer is configured to automatically send *10 messages* with keys and values. Each message is approximately *30-50 bytes*. 
+
+* The default value batch.size for our application is set to *16384 bytes*. Leave it as is. 
+
+
+
+* The next option is *linger.ms.* The default value for our application is 0. Change it the below value
++
+[source,bash,role="execute",subs=attributes+]
+----
+10000
+----
++
+image::m2/producer-linger_ms.png[]
++
+This will make the producer wait for 10 seconds or until the batch is full before sending it. 
+
+* Run the producer application again with by clicking the *Run Producer* button in the interactive application.
+
+* You should see that none of the messages are sent immediately. Only after 10 seconds the messages are sent to the topic. Wait for the 10 seconds and then you will see that the messages will be sent after the 10 seconds have elapsed.
++
+image::m2/producer-messages-sent.png[]
+
+* Observe that the producer has waited for linger.ms to elapse before sending the batch. 
+
+* Run the producer application again, but this time set the *linger.ms to 0* to see the difference in behavior.
++
+image::m2/producer-linger_ms_zero.png[]
+
+* This time the producer should send the messages immediately as linger.ms is set to 0. 
+
+=== Summary
+This section hopefully helped you get a high level understanding of the producer api and see a couple of producer configurations in action. 
+
+=== Up Next
+In the next section, we will first learn about the consumer configuration and then see the consumer in action.
+
+
+
