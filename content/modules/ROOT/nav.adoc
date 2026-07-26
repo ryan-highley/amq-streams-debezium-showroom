@@ -57,22 +57,22 @@
 ** xref:d1/nationalparks-pipeline-codechanges.adoc#adding_triggers_to_your_pipeline[Adding Triggers to your Pipeline]
 ** xref:d1/nationalparks-pipeline-codechanges.adoc#configuring_webhooks[Exercise: Configuring Web Hooks]
 ** xref:d1/nationalparks-pipeline-codechanges.adoc#using_webhooks[Exercise: Using Web Hooks]
-// * xref:d1/mlbparks-templates.adoc[MLBParks App]
-// ** xref:d1/mlbparks-templates.adoc#instantiate_template[Exercise: Instantiate a Template]
-// * xref:d1/mlbparks-binary-build.adoc[Binary Builds]
-// ** xref:d1/mlbparks-binary-build.adoc#moving_on_from_s2i[Moving on From S2I]
-// ** xref:d1/mlbparks-binary-build.adoc#fast_iterative_code_change_using_binary_deploy[Fast Iterative Code Change Using Binary Deploy]
-// ** xref:d1/mlbparks-binary-build.adoc#using_binary_deployment[Exercise: Using Binary Deployment]
-// *** xref:d1/mlbparks-binary-build.adoc#clone_source[Clone source]
-// *** xref:d1/mlbparks-binary-build.adoc#setup_the_build_of_the_war_file[Setup the Build of the WAR file]
-// *** xref:d1/mlbparks-binary-build.adoc#code_change[Code change]
-// *** xref:d1/mlbparks-binary-build.adoc#doing_the_binary_build[Doing the Binary Build]
-// * xref:d1/mlbparks-debugging.adoc[Debugging Apps]
-// ** xref:d1/mlbparks-debugging.adoc#port_forwading_and_debugging[Background: Port Forwarding and Debugging]
-// ** xref:d1/mlbparks-debugging.adoc#enabling_debugging_in_eap_on_openshift[Exercise: Enabling Debugging in EAP on OpenShift]
-// ** xref:d1/mlbparks-debugging.adoc#port-forwarding_from_svc_to_our_local_machine[Exercise: Port-Forwarding from a Service to our local machine]
-// ** xref:d1/mlbparks-debugging.adoc#setting_up_remote_debugging[Attaching a Remote Debugger]
-// ** xref:d1/mlbparks-debugging.adoc#port-forwarding_from_pod_to_our_local_machine[Exercise: Port-Forwarding from the pod to our local machine]
+* xref:d1/mlbparks-templates.adoc[MLBParks App]
+** xref:d1/mlbparks-templates.adoc#instantiate_template[Exercise: Instantiate a Template]
+* xref:d1/mlbparks-binary-build.adoc[Binary Builds]
+** xref:d1/mlbparks-binary-build.adoc#moving_on_from_s2i[Moving on From S2I]
+** xref:d1/mlbparks-binary-build.adoc#fast_iterative_code_change_using_binary_deploy[Fast Iterative Code Change Using Binary Deploy]
+** xref:d1/mlbparks-binary-build.adoc#using_binary_deployment[Exercise: Using Binary Deployment]
+*** xref:d1/mlbparks-binary-build.adoc#clone_source[Clone source]
+*** xref:d1/mlbparks-binary-build.adoc#setup_the_build_of_the_war_file[Setup the Build of the WAR file]
+*** xref:d1/mlbparks-binary-build.adoc#code_change[Code change]
+*** xref:d1/mlbparks-binary-build.adoc#doing_the_binary_build[Doing the Binary Build]
+* xref:d1/mlbparks-debugging.adoc[Debugging Apps]
+** xref:d1/mlbparks-debugging.adoc#port_forwading_and_debugging[Background: Port Forwarding and Debugging]
+** xref:d1/mlbparks-debugging.adoc#enabling_debugging_in_eap_on_openshift[Exercise: Enabling Debugging in EAP on OpenShift]
+** xref:d1/mlbparks-debugging.adoc#port-forwarding_from_svc_to_our_local_machine[Exercise: Port-Forwarding from a Service to our local machine]
+** xref:d1/mlbparks-debugging.adoc#setting_up_remote_debugging[Attaching a Remote Debugger]
+** xref:d1/mlbparks-debugging.adoc#port-forwarding_from_pod_to_our_local_machine[Exercise: Port-Forwarding from the pod to our local machine]
 * xref:d1/common-further-resources.adoc[Further Resources]
 * xref:d1/common-workshop-links.adoc[Workshop Links]
 
@@ -120,83 +120,3 @@
 
 .Day 3 - BCBS SC Streams Platform Operations
 * xref:attachment$Debezium_VDraft.pdf[Debezium CDC Pipeline]
-// * xref:d3/deployment.adoc[Deployment]
-// ** xref:d3/deployment-namespaces.adoc[Namespaces and contents]
-// ** xref:d3/deployment-helm.adoc[Helm chart]
-// ** xref:d3/deployment-updates.adoc[Update process]
-// * xref:d3/custom-image.adoc[Custom Streams Image]
-// ** xref:d3/custom-image-jdbc.adoc[JDBC driver updates]
-// ** xref:d3/custom-image-db2-license.adoc[Db2 license jar]
-// ** xref:d3/custom-image-mks-iam.adoc[MKS IAM handler jars]
-// * xref:d3/message-decryption.adoc[Message Decryption Transform]
-// ** xref:d3/message-decryption-keys-per-topic.adoc[Decryption keys per topic]
-// ** xref:d3/message-decryption-key-storage.adoc[Key storage in Secret]
-// * xref:d3/db2-field-rename.adoc[Db2 Field Rename Transform]
-// * xref:d3/jdbc-sink-connector.adoc[JDBC Sink Connector Configuration]
-// * xref:d3/aws-msk.adoc[AWS MSK Configuration]
-// * xref:d3/custom-iam.adoc[CustomIAMClientCallbackHandler]
-
-
-
-// .Workshop Intro
-// * xref:index.adoc[Introduction]
-// * xref:intro/intro.0.adoc[The story behind this workshop]
-
-// .Module 1 - Fundamentals of Kafka and Basic Concepts
-// * xref:m1/module-01.0.adoc[Module 1 - Fundamentals of Kafka and Basic Concepts]
-// * xref:m1/module-01.1.adoc[Kafka Basics - Topics]
-// * xref:m1/module-01.2.adoc[Kafka Basics - Partitions (how Kafka scales & orders)]
-// * xref:m1/module-01.3.adoc[Kafka Basics - Producer]
-// * xref:m1/module-01.4.adoc[Kafka Basics - Consumer]
-// * xref:m1/module-01.5.adoc[Kafka Basics - Partitioning and Keys]
-// * xref:m1/module-01.6.adoc[Kafka Basics - Consumer Groups and Rebalancing]
-// * xref:m1/module-01.7.adoc[Kafka Basics - Topic Replication and Fault Tolerance]
-// * xref:m1/finish.adoc[Finish]
-
-// .Module 2 - Kafka Application: Producing and Consuming Messages using a Real-World Application
-// * xref:m2/module-02.0.adoc[Module 2 - Kafka Application: Producing and Consuming Messages using a Real-World Application]
-// * xref:m2/module-02.1.adoc[Building Producers]
-// * xref:m2/module-02.2.adoc[Producer in Action]
-// * xref:m2/module-02.3.adoc[Building Consumers]
-// * xref:m2/module-02.4.adoc[Consumer in Action]
-// * xref:m2/module-02.5.adoc[Real Time Streaming Application]
-// * xref:m2/module-02.6.adoc[Quarkus and Kafka: Better Together]
-// * xref:m2/finish.adoc[Finish]
-
-// .Module 3 - Stream Processing
-// * xref:m3/module-03.0.adoc[Module 3 - Stream Processing]
-// * xref:m3/module-03.1.adoc[Tracking Web Activity using Kafka Streams]
-// * xref:m3/module-03.2.adoc[How Kafka Streams works behind the scenes]
-// * xref:m3/finish.adoc[Finish]
-
-// .Module 4 - Change Data Capture
-// * xref:m4/module-04.0.adoc[Module 4 - Change Data Capture]
-// * xref:m4/module-04.1.adoc[Deploy Debezium Connector]
-// * xref:m4/module-04.2.adoc[Verify Change Events are Captured]
-// * xref:m4/module-04.3.adoc[Globex Loyalty Program with Change Data Capture]
-// * xref:m4/finish.adoc[Finish]
-
-// .Module 5 - Schema Registry (Skipped)
-// * xref:m5/module-05.0.adoc[Module 5 - Schema Registry]
-// * xref:m5/module-05.1.adoc[Adding Schema to the Schema Registry]
-// * xref:m5/module-05.2.adoc[Producing and Consuming Messages interacting with Schema Registry]
-// * xref:m5/finish.adoc[Finish]
-
-// .Module 6 - Kafka Security
-// * xref:m6/module-06.0.adoc[Module 6 - Kafka Security]
-// * xref:m6/module-06.1.adoc[Authentication]
-// * xref:m6/module-06.2.adoc[Authorization, ACLs]
-// * xref:m6/finish.adoc[Finish]
-
-// .Module 7 - Record Encryption with Kafka Proxy
-// * xref:m7/module-07.0.adoc[Module 7 - Record Encryption with Kafka Proxy]
-// * xref:m7/module-07.1.adoc[Exploring the Encryption Setup]
-// * xref:m7/module-07.2.adoc[Record Encryption in Action]
-// * xref:m7/finish.adoc[Finish]
-
-// * xref:m8/module-08.0.adoc[Module 8 - Kafka and AI ]
-// * xref:m8/module-08.0.adoc[Introduction]
-// * xref:m8/module-08.1.adoc[MCP with Kafka]
-// * xref:m8/finish.adoc[Finish]
-
-// * xref:conclusion/summary.adoc[Workshop Summary]

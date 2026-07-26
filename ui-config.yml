@@ -24,8 +24,8 @@ tabs:
     secondary_port: 443
 
   # Kafka Console
-  # - name: Kafka Console
-  #   url: 'https://console-kafka-console.${DOMAIN}'
+  - name: Kafka Console
+    url: 'https://console-kafka-console.${DOMAIN}'
 
   # External page
   - name: Red Hat Documentation
