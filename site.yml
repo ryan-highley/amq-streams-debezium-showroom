@@ -1,6 +1,6 @@
 ---
 site:
-  title: BCBS SC - Red Hat OpenShift and Streams for Apache Kafka Workshop
+  title: BCBS SC - Red Hat Custom Workshop
   url: https://github.com/ryan-highley/amq-streams-debezium-showroom
   start_page: modules::index.adoc
 

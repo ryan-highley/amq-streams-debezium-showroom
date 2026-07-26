@@ -1,5 +1,5 @@
 name: modules
-title: Showroom Collection
+title: Red Hat OpenShift and Streams for Apache Kafka Workshop
 version: ~
 nav:
   - modules/ROOT/nav.adoc
@@ -15,3 +15,9 @@ asciidoc:
     openshift_cluster_ingress_domain: apps.cluster-abc123.ocpv00.rhdp.net
     streams: Red Hat Streams for Apache Kafka
     registry: Red Hat build of Apicurio Registry
+    user: userX
+    password: whatever
+    login_command: oc login --insecure-skip-tls-verify=false -u userX -p whatever https://api.cluster.example.com:6443
+    gitea_console_url: https://gitea.apps.cluster.example.com
+    gitea_password: whatever
+    gitea_user: userX
