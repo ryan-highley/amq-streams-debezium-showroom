@@ -4,8 +4,8 @@
 include::d1/vars.adoc[]
 
 == Overview
-This workshop provides a hands-on introduction to the Red Hat OpenShift Container Platform and Streams for Apache Kafka deployments supporting BCBS - SC integrating with BCA messaging mandates.
+This workshop provides a hands-on introduction to the Red Hat OpenShift Container Platform and Streams for Apache Kafka deployments supporting BCBS of SC integrating with BCA messaging mandates.
 
-The 3-day workshop is intended to provide both an overview of OpenShift and Streams products as well as a deeper dive into some documented operational procedures specific to the BCBS - SC Debezium platform.
+The 3-day workshop is intended to provide both an overview of OpenShift and Streams products as well as a deeper dive into some documented operational procedures specific to the BCBS of SC Debezium platform.
 
 An outline for the workshop is provided in the workshop site navigation.
