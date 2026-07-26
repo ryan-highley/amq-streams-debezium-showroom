@@ -18,6 +18,3 @@ asciidoc:
     user: userX
     password: whatever
     login_command: oc login --insecure-skip-tls-verify=false -u userX -p whatever https://api.cluster.example.com:6443
-    gitea_console_url: https://gitea.apps.cluster.example.com
-    gitea_password: whatever
-    gitea_user: userX
