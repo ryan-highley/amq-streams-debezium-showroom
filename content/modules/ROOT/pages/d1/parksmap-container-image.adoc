@@ -17,7 +17,7 @@ With OpenShift it can be done directly from the web console.
 
 In the *OCP Console* tab, navigate to the *Topology* view in the *{ocp4_starter_project}* project.
 
-At the top left, click the *+* icon. You will see a menu where you have multiple options to deploy application to OpenShift. Click *Container images* to open a dialog that will allow you to specify the information for the image you want to deploy.
+At the top right, click the *+* icon. You will see a menu where you have multiple options to deploy application to OpenShift. Click *Container images* to open a dialog that will allow you to specify the information for the image you want to deploy.
 
 [.bordershadow]
 image::d1/openshift-console-add-container.png[link="self",window=_blank]
