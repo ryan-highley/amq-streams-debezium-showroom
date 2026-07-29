@@ -53,7 +53,7 @@ oc project {user}-tenant-comm-kafka
 curl -s https://raw.githubusercontent.com/streams-kafka-workshop/workshop_scripts/refs/heads/main/demo-cg_consumers.sh | bash
 ----
 
-* Navigate to the *Kafka Console > consumer groups > demo-cg* to view the first consumers and partitions being assigned to each consumer.
+* Navigate to the *Kafka Console > Groups > demo-cg* to view the first consumers and partitions being assigned to each consumer.
 +
 image::m1/demo-cg.png[]
 
@@ -99,7 +99,7 @@ image::m1/roundup-image.png[]
 
 
 
-* Navigate to the *Kafka Console > topics > consumer groups > demo-cg* and expand consumer cg-c1 we started previously.
+* Navigate to the *Kafka Console > Topics > Groups > demo-cg* and expand consumer cg-c1 we started previously.
 
 * As the producer continuously keeps churning out messages, observe the lag, committed offset and end offset keep changing for each consumer as shown below. The lag is basically *End Offset - Committed Offset*. Feel free to refresh the page if you don't see the values changing for the lag, committed offset and end offset.
 +
