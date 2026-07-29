@@ -7,7 +7,7 @@ include::../style.adoc[]
 
 * Click on the browser tab pointing to the Globex retail application. If you don't have a browser tab open on the application, navigate to the link:{globex_web_url}[Globex retail application, window="_globex"] to launch the application.
 
-* Click on the login button on the top right corner of the application. 
+* Click on the login button on the top right corner of the application.
 +
 image::m4/globex-login.png[]
 
@@ -45,7 +45,7 @@ image::m4/order_confirmation_page.png[]
 
 * Now that you have created some orders in the Globex retail application, let's verify that the Debezium connector has captured the corresponding change events in the database and produced them to the appropriate Kafka topics.
 
-* Open the browser tab pointing to the streams for Apache Kafka console UI. If you did close the tab, navigate to https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}[streams for Apache Kafka console, window="_amqstreams"]. 
+* Open the browser tab pointing to the streams for Apache *Kafka Console* UI. If you did close the tab, navigate to *Kafka Console*.
 
 * From the Topics page, open the *globex.updates.public.orders* topic, and verify that the topic contains 1 message.
 +
@@ -55,17 +55,17 @@ image::m4/amq-console-debezium-topic-orders.png[]
 +
 image::m4/amq-console-debezium-topic-order-details.png[]
 
-* Go back to the streams for Apache Kafka Console topics page, and this time open the *globex.updates.public.line_item* topic. You should see one message per item in the order you created previously.
+* Go back to the streams for Apache *Kafka Console* topics page, and this time open the *globex.updates.public.line_item* topic. You should see one message per item in the order you created previously.
 +
 image::m4/amqconsole-debezium-topic-line-items.png[]
 
 
-* If you want to simulate a larger number of orders, you can use the _Order simulator_ application deployed in the _globex-{user_name}_ namespace on OpenShift.
+* If you want to simulate a larger number of orders, you can use the _Order simulator_ application deployed in the _globex-{user}_ namespace on OpenShift.
 
-* In the browser window, open the tab pointing to the OpenShift console. If you don't have a tab open to the console, navigate to {openshift_cluster_console}/topology/ns/globex-{user_name}?view=graph[OpenShift console, window="_console"]. If needed login with your username and password (`{user_name}`/`{password}`).
+* In the browser window, open the tab pointing to the OpenShift console. If you don't have a tab open to the console, navigate to {openshift_cluster_console}/topology/ns/globex-{user}?view=graph[OpenShift console, window="_console"]. If needed login with your username and password (`{user}`/`{password}`).
 
 
-// * Switch to the *globex-{user_name}* namespace by selecting the namespace from the namespace selection drop-down menu in the top left.
+// * Switch to the *globex-{user}* namespace by selecting the namespace from the namespace selection drop-down menu in the top left.
 // +
 // image::m4/openshift-console-developer-select-namespace.png[]
 
@@ -87,11 +87,9 @@ image::m4/order-simulator-random-customer.png[]
 
 * Click *Execute* to execute the REST call to the simulator.
 
-* Check in https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}[streams for Apache Kafka console, window="_amqstreams"] that new messages are produced to the *globex.updates.public.orders* and *globex.updates.public.line_item* topics.
+* Check in *Kafka Console* that new messages are produced to the *globex.updates.public.orders* and *globex.updates.public.line_item* topics.
 
 * This shows how Debezium can be used to capture change events from a relational database and produce them to Kafka topics in real-time, enabling event-driven architectures and data integration scenarios.
 
 === Up Next
 In the next section, we will see some practical applications of change data capture in the context of the Globex retail application.
-
-

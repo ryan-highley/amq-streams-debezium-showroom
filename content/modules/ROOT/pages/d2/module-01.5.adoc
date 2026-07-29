@@ -23,7 +23,7 @@ NOTE: You will not see any output in the terminal since the console producer doe
 
 * Now stop the producer by hitting (Ctrl+C).
 
-* Navigate to the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="_amqstreams"] > topics > demo and verify the messages being produced to the topic `demo`. You should see messages with keys `k0` to `k9` being produced to the topic.
+* Navigate to the *Kafka Console > topics > demo* and verify the messages being produced to the topic `demo`. You should see messages with keys `k0` to `k9` being produced to the topic.
 +
 image::m1/console_key_messages_pairs.png[]
 
@@ -37,4 +37,3 @@ Kafka uses a partitioner to determine which partition a message goes to based on
 
 === Up Next
 This is a simple example of how Kafka partitions messages based on keys. In the next section, we will learn about consumer groups and rebalancing.
-

@@ -7,7 +7,7 @@ Kafka's fault tolerance is fundamentally built upon its topic replication mechan
 For each partition, Kafka maintains multiple copies called replicas, distributed across different Kafka brokers:
 
 ** One replica is designated as the leader. All produce and consume requests for that partition are handled exclusively by its leader to ensure strong consistency and message ordering.
-** The other replicas are followers. Their sole responsibility is to diligently replicate messages from the leader to stay up-to-date. 
+** The other replicas are followers. Their sole responsibility is to diligently replicate messages from the leader to stay up-to-date.
 
 ** When a broker with a leader partition goes down, a new leader is elected on a different node.
 
@@ -28,7 +28,7 @@ kafka-topics.sh --bootstrap-server $BOOTSTRAP \
   --create --topic replicated --partitions 3 --replication-factor 3
 ----
 
-* Navigate to the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="_amqstreams"] > topics > replicated and verify that the topic `replicated` is created with 3 partitions
+* Navigate to the *Kafka Console > topics > replicated* and verify that the topic `replicated` is created with 3 partitions
 +
 image::m1/replicated-topic.png[]
 
@@ -42,7 +42,7 @@ image::m1/replicated-topic-partitions.png[]
 
 * If the leader broker goes down, one of the followers will be automatically elected as the new leader to ensure high availability. This ensures that producers and consumers can continue to operate without interruption.
 
-NOTE: We are not going to simulate a broker failure in this exercise, since we need them to be up and running for the rest of the module. 
+NOTE: We are not going to simulate a broker failure in this exercise, since we need them to be up and running for the rest of the module.
 
 
 === Summary
@@ -51,7 +51,3 @@ NOTE: We are not going to simulate a broker failure in this exercise, since we n
 * Replication factor ensures that each partition has one leader and multiple followers (replicas) to ensure fault tolerance.
 
 * The replicas are spread across different brokers to ensure fault tolerance, so even if one broker goes down, the data is still available on other brokers.
-
-
-
-

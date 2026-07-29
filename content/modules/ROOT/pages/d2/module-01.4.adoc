@@ -30,7 +30,7 @@ A Kafka Consumer reads messages from Kafka topics and hands them to your applica
 +
 [source,sh,role="execute",subs=attributes+]
 ----
-oc rsh -n kafka-{user_name} kafka-toolbox
+oc rsh -n {user}-tenant-comm-kafka kafka-toolbox
 ----
 
 * Run the consumer in the *lower terminal*
@@ -56,7 +56,7 @@ kafka-console-consumer.sh --bootstrap-server $BOOTSTRAP --topic demo \
 +
 NOTE: Since we are sending very few messages, there is chance that all the messages might end up in the same partition. But in real world, there would be thousand of messages per second and without a key, the messages might end up in different partitions.
 
-* Navigate to the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="_amqstreams"] > Consumer groups. Click on the *demo-group* consumer group to see the details. 
+* Navigate to the *Kafka Console > Consumer groups*. Click on the *demo-group* consumer group to see the details.
 +
 image::m1/console_demo-group.png[]
 

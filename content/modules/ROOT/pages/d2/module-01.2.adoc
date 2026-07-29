@@ -9,7 +9,7 @@ Storing the messages in a topic in a single node would limit the scalability of 
 image::m1/topic-image.png[]
 
 === Message Ordering
-* Messages sent to kafka can consist of only a value or a key-value pair. 
+* Messages sent to kafka can consist of only a value or a key-value pair.
 
 * Though ordering of the messages is not guaranteed, across a topic, strict order can be achieved within a partition.
 
@@ -33,13 +33,13 @@ image::m1/replication-broker.png[]
 
 === Exercise
 
-* Click https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka/[here, window="_amqstreams"] to navigate to the {streams} console to view the topic you created.
+* Click *Kafka Console* to navigate to the {streams} console to view the topic you created.
 
 * Click on *Topics* in the left menu to see the list of topics. You should see the `demo` topic you created. Click on the `demo` topic and then navigate to the *Partitions* tab. You should see the `demo` topic  has 3 partitions.
 +
 image::m1/partitions-image-console.png[]
 
-* The partitions are spread across different brokers to ensure fault tolerance. The leader column shows the Broker ID in which the partition is located. 
+* The partitions are spread across different brokers to ensure fault tolerance. The leader column shows the Broker ID in which the partition is located.
 +
 image::m1/leader-image-console.png[]
 

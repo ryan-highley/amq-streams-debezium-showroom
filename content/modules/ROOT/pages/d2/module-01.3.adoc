@@ -10,7 +10,7 @@ A Kafka Producer is a client application responsible for writing data to a Kafka
 === Core Functionality and API:
 * API: Producers interact with Kafka through the KafkaProducer API. Producers can be in written in a variety of languages such as Java,  Python, Go, JavaScript, and .NET.
 
-* Producers publish messages to a topic, which appends each message to the end of a partition. 
+* Producers publish messages to a topic, which appends each message to the end of a partition.
 
 === Running the Producer
 * Run the basic producer in the *upper terminal*
@@ -33,11 +33,11 @@ kafka-console-producer.sh --bootstrap-server $BOOTSTRAP --topic demo
 
 // * Hit `Ctrl + C` followed by `Enter` in the *upper terminal* to stop the producer after sending the messages.
 
-* Navigate to the https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka[streams console, window="_amqstreams"] *topics > demo* to see the messages you sent.
+* Navigate to the *Kafka Console > topics > demo* to see the messages you sent.
 +
 image::m1/console_messages.png[]
 
-* The messages you sent from the producer are successfully received and stored in the Kafka topic `demo`. 
+* The messages you sent from the producer are successfully received and stored in the Kafka topic `demo`.
 
 
 === Up Next

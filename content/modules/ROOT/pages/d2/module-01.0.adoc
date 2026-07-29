@@ -1,7 +1,7 @@
 :imagesdir: ../../assets/images
 include::../style.adoc[]
 
-== Module 1: 
+== Module 1:
 {m1}
 
 === Basics - What is a Kafka Cluster?
@@ -41,7 +41,7 @@ image::m1/broker_image.png[]
 === Cluster Details - Walkthrough
 A kafka cluster made up of 3 brokers has already been created for this workshop. You will be working with this cluster throughout this workshop. Let's quickly explore the high-level details of the cluster using the {streams} console.
 
-* Click https://amq-streams-console-{user_name}.{openshift_cluster_subdomain}/kafka/[here, window="_amqstreams"] to navigate to the {streams} console.
+* Click *Kafka Console* to navigate to the {streams} console.
 
 * Login anonymously to the console.
 +
@@ -66,9 +66,3 @@ image::m1/bootstrap_server_details.png[]
 NOTE: The external bootstrap server section should be empty as we currently have not enabled access to the Kafka cluster from outside the OpenShift cluster.
 
 This concludes a very high-level overview of how Kafka clusters and brokers work. In the next section we'll learn about Kafka topics and create a topic.
-
-
-
-
-
-

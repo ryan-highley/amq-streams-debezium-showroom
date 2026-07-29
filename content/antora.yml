@@ -18,3 +18,4 @@ asciidoc:
     user: userX
     password: whatever
     login_command: oc login --insecure-skip-tls-verify=false -u userX -p whatever https://api.cluster.example.com:6443
+    user_name: userX

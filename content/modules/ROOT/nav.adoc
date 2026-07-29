@@ -88,15 +88,6 @@
 ** xref:d2/module-01.7.adoc[Kafka Basics - Topic Replication and Fault Tolerance]
 ** xref:d2/module-01.finish.adoc[Finish]
 
-* xref:d2/module-02.0.adoc[Kafka Application: Producing and Consuming Messages using a Real-World Application]
-** xref:d2/module-02.1.adoc[Building Producers]
-** xref:d2/module-02.2.adoc[Producer in Action]
-** xref:d2/module-02.3.adoc[Building Consumers]
-** xref:d2/module-02.4.adoc[Consumer in Action]
-** xref:d2/module-02.5.adoc[Real Time Streaming Application]
-** xref:d2/module-02.6.adoc[Quarkus and Kafka: Better Together]
-** xref:d2/module-02.finish.adoc[Finish]
-
 * xref:d2/module-03.0.adoc[Stream Processing]
 ** xref:d2/module-03.1.adoc[Tracking Web Activity using Kafka Streams]
 ** xref:d2/module-03.2.adoc[How Kafka Streams works behind the scenes]
@@ -112,11 +103,6 @@
 ** xref:d2/module-06.1.adoc[Authentication]
 ** xref:d2/module-06.2.adoc[Authorization, ACLs]
 ** xref:d2/module-06.finish.adoc[Finish]
-
-* xref:d2/module-07.0.adoc[Record Encryption with Kafka Proxy]
-** xref:d2/module-07.1.adoc[Exploring the Encryption Setup]
-** xref:d2/module-07.2.adoc[Record Encryption in Action]
-** xref:d2/module-07.finish.adoc[Finish]
 
 .Day 3 - BCBS SC Streams Platform Operations
 * xref:attachment$Debezium_VDraft.pdf[Debezium CDC Pipeline]
