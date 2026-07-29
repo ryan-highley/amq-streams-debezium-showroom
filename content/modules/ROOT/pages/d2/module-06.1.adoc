@@ -62,9 +62,9 @@ oc project {user}-tenant-comm-kafka
 [source,bash,role="execute",subs=attributes+]
 ----
 echo "Ports:" && \
-oc get svc kafka-kafka-bootstrap -o jsonpath='{range .spec.ports[*]}{.name}{" → "}{.port}{" ("}{.protocol}{")"}{"\n"}{end}' && \
+oc get svc btds-kafkacluster-kafka-bootstrap -o jsonpath='{range .spec.ports[*]}{.name}{" → "}{.port}{" ("}{.protocol}{")"}{"\n"}{end}' && \
 echo -e "\nStrimzi Discovery:" && \
-oc get svc kafka-kafka-bootstrap -o jsonpath='{.metadata.annotations.strimzi\.io/discovery}' | jq
+oc get svc btds-kafkacluster-kafka-bootstrap -o jsonpath='{.metadata.annotations.strimzi\.io/discovery}' | jq
 ----
 
 * You should see an output similar to the following.
@@ -157,7 +157,7 @@ oc rsh -n {user}-tenant-comm-kafka kafka-toolbox
 +
 [source,sh,role="execute",subs=attributes+]
 ----
-kafka-topics.sh --bootstrap-server kafka-kafka-bootstrap:9095 \
+kafka-topics.sh --bootstrap-server btds-kafkacluster-kafka-bootstrap:9095 \
   --create --topic secure-demo --partitions 3 --replication-factor 1
 ----
 
@@ -192,7 +192,7 @@ EOF
 +
 [source,sh,role="execute",subs=attributes+]
 ----
-kafka-topics.sh --bootstrap-server kafka-kafka-bootstrap:9095 \
+kafka-topics.sh --bootstrap-server btds-kafkacluster-bootstrap:9095 \
   --command-config /tmp/client.properties \
   --create --topic secure-demo --partitions 3 --replication-factor 1
 ----

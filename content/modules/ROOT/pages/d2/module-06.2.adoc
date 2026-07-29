@@ -90,7 +90,7 @@ EOF
 +
 [source,sh,role="execute",subs=attributes+]
 ----
-kafka-topics.sh --bootstrap-server kafka-kafka-bootstrap:9095 \
+kafka-topics.sh --bootstrap-server btds-kafkacluster-kafka-bootstrap:9095 \
   --command-config /tmp/client.properties \
   --delete --topic secure-demo
 ----
@@ -109,7 +109,7 @@ ERROR org.apache.kafka.common.errors.TopicAuthorizationException: Topic authoriz
 [source,sh,role="execute",subs=attributes+]
 ----
 kafka-console-producer.sh \
-  --bootstrap-server kafka-kafka-bootstrap:9095 \
+  --bootstrap-server btds-kafkacluster-kafka-bootstrap:9095 \
   --producer.config /tmp/client.properties \
   --topic secure-demo
 ----
@@ -204,7 +204,7 @@ EOF
 [source,sh,role="execute",subs=attributes+]
 ----
 kafka-console-producer.sh \
-  --bootstrap-server kafka-kafka-bootstrap:9095 \
+  --bootstrap-server btds-kafkacluster-kafka-bootstrap:9095 \
   --producer.config /tmp/client.properties \
   --topic secure-demo
 ----
@@ -246,7 +246,7 @@ pod "sinster-consumer" deleted
 [source,sh,role="execute",subs=attributes+]
 ----
 kafka-console-consumer.sh \
-  --bootstrap-server kafka-kafka-bootstrap:9095 \
+  --bootstrap-server btds-kafkacluster-kafka-bootstrap:9095 \
   --consumer.config /tmp/client.properties \
   --topic secure-demo \
   --from-beginning

@@ -14,7 +14,7 @@ include::../style.adoc[]
 +
 [source,bash,role=execute,subs="attributes"]
 ----
-kafka-kafka-bootstrap.kafka-{user}.svc.cluster.local:9092
+btds-kafkacluster-kafka-bootstrap.{user}-tenant-comm-kafka.svc:9092
 ----
 
 
