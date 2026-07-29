@@ -88,12 +88,6 @@
 ** xref:d2/module-01.7.adoc[Kafka Basics - Topic Replication and Fault Tolerance]
 ** xref:d2/module-01.finish.adoc[Finish]
 
-* xref:d2/module-04.0.adoc[Change Data Capture]
-** xref:d2/module-04.1.adoc[Deploy Debezium Connector]
-** xref:d2/module-04.2.adoc[Verify Change Events are Captured]
-** xref:d2/module-04.3.adoc[Globex Loyalty Program with Change Data Capture]
-** xref:d2/module-04.finish.adoc[Finish]
-
 * xref:d2/module-06.0.adoc[Security]
 ** xref:d2/module-06.1.adoc[Authentication]
 ** xref:d2/module-06.2.adoc[Authorization, ACLs]
