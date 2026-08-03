@@ -1,0 +1,3 @@
+assembly: {}
+build:
+  command: asciidoctor-pdf -r ./lib/configure-asciidoctor-pdf.rb

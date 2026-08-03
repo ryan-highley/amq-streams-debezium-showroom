@@ -1,4 +1,3 @@
----
 site:
   title: BCBS SC - Red Hat Custom Workshop
   url: https://github.com/ryan-highley/amq-streams-debezium-showroom
@@ -22,6 +21,7 @@ antora:
       mermaid_initialize_options:
         start_on_load: true
     - require: '@andrew-jones/antora-tabs-extension'
+    - require: '@antora/pdf-extension'
 
 output:
   dir: ./www

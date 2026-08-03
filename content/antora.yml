@@ -19,3 +19,8 @@ asciidoc:
     password: whatever
     login_command: oc login --insecure-skip-tls-verify=false -u userX -p whatever https://api.cluster.example.com:6443
     user_name: userX
+    gitlab_user: userX
+    gitlab_password: whatever
+    gitlab_console_url: https://gitlab-gitlab.apps.cluster-abc123.ocpv00.rhdp.net
+    openshift_cluster_console: https://console-openshift-console.apps.cluster-abc123.ocpv00.rhdp.net
+    kafka_cluster_bootstrap_domain: btds-kafkacluster-kafka-bootstrap.tenant-comm-kafka.svc

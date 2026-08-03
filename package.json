@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "@andrew-jones/antora-tabs-extension": "github:andrew-jones/antora-tabs-extension"
+    "@andrew-jones/antora-tabs-extension": "github:andrew-jones/antora-tabs-extension",
+    "@antora/pdf-extension": "^1.0.0-rc.7",
+    "@sntke/antora-mermaid-extension": "^0.0.13"
   }
 }
